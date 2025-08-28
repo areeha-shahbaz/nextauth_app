@@ -1,0 +1,162 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  background: linear-gradient(135deg, #15173f, #6b72f4);
+  height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.message{
+    margin-top:1rem;
+    font-size:1rem;
+    font-weight:500;
+}
+.message.success{
+    color:#2e7d32;
+}
+
+.message.error{
+    color:#d32f2f;
+}
+.container {
+  background: #fff;
+  padding: 2rem 2.5rem;
+  border-radius: 12px;
+  box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+  width: 100%;
+  max-width: 380px;
+  text-align: center;
+}
+
+.container h1 {
+  margin-bottom: 1.5rem;
+  color: #333;
+  font-size: 1.8rem;
+}
+
+.container input {
+  width: 100%;
+  padding: 12px 15px;
+  margin: 10px 0;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  font-size: 1rem;
+  transition: border 0.3s;
+}
+
+.container input:focus {
+  border-color: #4e54c8;
+  outline: none;
+}
+
+.container button {
+  width: 100%;
+  padding: 12px;
+  margin-top: 15px;
+  border: none;
+  border-radius: 8px;
+  background: #565bba;
+  color: #fff;
+  font-size: 1rem;
+  font-weight: bold;
+  cursor: pointer;
+  transition: all 0.3s;
+}
+
+.container button:hover {
+  background: #3c40a0;
+}
+
+.container p {
+  margin-top: 1rem;
+  font-size: 0.9rem;
+  color: #666;
+}
+
+.page-container {
+  min-height: 100vh;
+  background: url('/bg.jpeg') center/cover no-repeat;
+  display: flex;
+  flex-direction: column;
+  color: white;
+  text-align: center;
+}
+
+.page-header {
+  background: rgba(0, 0, 0, 0.95);
+  padding: 1rem 2rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+}
+
+.page-header .logo {
+  font-size: 1.8rem;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.page-header nav button {
+  margin-left: 1rem;
+  background: none;
+  border: none;
+  color: white;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: color 0.3s;
+}
+
+.page-header nav button:hover {
+  color: #cbcaca;
+}
+
+.page-main {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 2rem;
+ 
+}
+.overlay{
+  color:black;
+  padding:2rem;
+  border-radius:8px;
+  background-color:#f5f5f5f0;
+}
+.page-main h1 {
+  font-size: 4rem;
+  margin-bottom: 1rem;
+  
+}
+
+.page-main p {
+  font-size: 1.2rem;
+  margin-bottom: 2rem;
+ 
+}
+
+.page-main button {
+  padding: 0.8rem 2rem;
+  font-size: 1rem;
+  background: #3137ab;
+  border: none;
+  border-radius: 18px;
+  cursor: pointer;
+  color: white;
+  font-weight: bold;
+  transition: all ease 0.3s;
+}
+
+.page-main button:hover {
+  background: #242675;
+}
+
