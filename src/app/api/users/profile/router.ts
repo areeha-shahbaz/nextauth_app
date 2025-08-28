@@ -1,8 +1,8 @@
 import { NextRequest, NextResponse } from "next/server";
 import User from "src/models/userModel";
 import connect from "src/dbConnection/dbConnection";
+import jwt from "jsonwebtoken";
 
-const jwt =require("jsonwebtoken");
 
 export async function GET(req: NextRequest) {
  

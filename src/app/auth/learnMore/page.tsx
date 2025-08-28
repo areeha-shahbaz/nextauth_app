@@ -1,7 +1,7 @@
 'use client';
-import {requireAuth} from "../../../authCondition";
+import {useRequireAuth} from "../../../authCondition";
  function LearnMorePage(){
-    requireAuth();
+    useRequireAuth();
     return(
         <div className="page-container">
             <main className="page-main">

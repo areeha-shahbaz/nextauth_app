@@ -50,8 +50,12 @@ export async function POST(request: NextRequest) {
       message: "User registered successfully. Please check your email to verify your account.",
       success: true,
     });
-  } catch (error: any) {
-    console.error("Signup error:", error);
-    return NextResponse.json({ error: error.message }, { status: 500 });
+  } catch (error) {
+  console.error("Signup error:", error);
+  return NextResponse.json(
+    { error: (error as Error).message },
+    { status: 500 }
+  );
   }
 }
+

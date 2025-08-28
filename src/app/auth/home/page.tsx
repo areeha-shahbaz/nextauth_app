@@ -1,12 +1,17 @@
 "use client";
 import { useRouter } from "next/navigation";
-import {requireAuth} from "../../../authCondition";
+import {useRequireAuth} from "../../../authCondition";
 import { useEffect, useState } from "react";
 
+interface User {
+  name: string;
+}
+
 export default function HomePage() {
-  requireAuth();
+ useRequireAuth();
   const router = useRouter();
-  const [user, setUser] = useState<any>(null);
+  const [user, setUser] = useState<User | null>(null);
+
 
   useEffect(() => {
     const storedUser = localStorage.getItem("user");
