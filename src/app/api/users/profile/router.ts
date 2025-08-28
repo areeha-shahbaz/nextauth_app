@@ -3,7 +3,10 @@ import User from "src/models/userModel";
 import connect from "src/dbConnection/dbConnection";
 import jwt from "jsonwebtoken";
 
-
+interface JwtPayload {
+  id: string;
+  email: string;
+}
 export async function GET(req: NextRequest) {
  
   try {
@@ -15,7 +18,7 @@ export async function GET(req: NextRequest) {
     }
 
     const token = authHeader.split(" ")[1];
-    const decoded: any = jwt.verify(token, process.env.JWT_SECRET!);
+    const decoded = jwt.verify(token, process.env.JWT_SECRET!) as JwtPayload;
 
     const user = await User.findById(decoded.id).select("-passwordHash");
     if (!user) {
@@ -23,7 +26,11 @@ export async function GET(req: NextRequest) {
     }
 
     return NextResponse.json({ user });
-  } catch (error: any) {
-    return NextResponse.json({ error: error.message }, { status: 500 });
+  } catch (error: unknown) {
+    if (error instanceof Error) {
+      return NextResponse.json({ error: error.message }, { status: 500 });
+    }
+    return NextResponse.json({ error: "Unknown error occurred" }, { status: 500 });
   }
+
 }
