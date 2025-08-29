@@ -4,9 +4,9 @@ import React, { useRef, useState } from "react";
 import { GoogleMap, LoadScript, Marker, Autocomplete } from "@react-google-maps/api";
 import styles from "./landing.module.css";
 
-type LatLng = { lat: number; lng: number };
+type Coordinates = { lat: number; lng: number };
 
-interface Weather {
+interface WeatherData {
   timezone: string;
   current?: {
     temp: number;
@@ -19,42 +19,44 @@ interface Weather {
   }[];
 }
 
-const DEFAULT_CENTER: LatLng = { lat: 20.5937, lng: 78.9629 };
-const MAP_CONTAINER_STYLE = { width: "100%", height: "500px" }; 
+const DEFAULT_LOCATION: Coordinates = { lat: 30.3753, lng: 69.3451 };
+const MAP_SIZE = { width: "100%", height: "500px" };
+
 export default function LandingPage() {
-  const [marker, setMarker] = useState<LatLng | null>(null);
-  const [weather, setWeather] = useState<Weather | null>(null);
+  const [markerPosition, setMarkerPosition] = useState<Coordinates | null>(null);
+  
+  const [weather, setWeather] = useState<WeatherData | null>(null);
   const autocompleteRef = useRef<google.maps.places.Autocomplete | null>(null);
 
-  const fetchWeather = async (lat: number, lon: number) => {
+  const fetchWeatherData = async (lat: number, lng: number) => {
     try {
-      const res = await fetch(`/api/weather?lat=${lat}&lon=${lon}`);
-      const data = await res.json();
+      const response = await fetch(`/api/weather?lat=${lat}&lon=${lng}`);
+      const data = await response.json();
       setWeather(data);
-    } catch (err) {
-      console.error("Error fetching weather:", err);
+    } catch (error) {
+      console.error("Failed to fetch weather data:", error);
     }
   };
 
-  const onPlaceChanged = () => {
+  const handlePlaceSelect = () => {
     const place = autocompleteRef.current?.getPlace();
     const location = place?.geometry?.location;
     if (!location) return;
 
     const lat = location.lat();
     const lng = location.lng();
-    setMarker({ lat, lng });
-    fetchWeather(lat, lng);
+    setMarkerPosition({ lat, lng });
+    fetchWeatherData(lat, lng);
   };
 
-  const onMapClick = (e: google.maps.MapMouseEvent) => {
-    const location = e.latLng;
+  const handleMapClick = (event: google.maps.MapMouseEvent) => {
+    const location = event.latLng;
     if (!location) return;
 
     const lat = location.lat();
     const lng = location.lng();
-    setMarker({ lat, lng });
-    fetchWeather(lat, lng);
+    setMarkerPosition({ lat, lng });
+    fetchWeatherData(lat, lng);
   };
 
   return (
@@ -67,30 +69,30 @@ export default function LandingPage() {
       >
         <Autocomplete
           onLoad={(autocomplete) => (autocompleteRef.current = autocomplete)}
-          onPlaceChanged={onPlaceChanged}
+          onPlaceChanged={handlePlaceSelect}
         >
           <input
             type="text"
-            placeholder="Search city..."
+            placeholder="Search for a city..."
             className={styles.searchInput}
           />
         </Autocomplete>
 
         <div className={styles.mapContainer}>
           <GoogleMap
-            mapContainerStyle={MAP_CONTAINER_STYLE}
-            center={marker ?? DEFAULT_CENTER}
-            zoom={marker ? 8 : 3}
-            onClick={onMapClick}
+            mapContainerStyle={MAP_SIZE}
+            center={markerPosition ?? DEFAULT_LOCATION}
+            zoom={markerPosition ? 8 : 5}
+            onClick={handleMapClick}
           >
-            {marker && <Marker position={marker} />}
+            {markerPosition && <Marker position={markerPosition} />}
           </GoogleMap>
         </div>
       </LoadScript>
-
       {weather && (
         <div className={styles.weatherContainer}>
           <h2 className={styles.weatherHeading}>Weather — {weather.timezone}</h2>
+
           {weather.current && (
             <p className={styles.weatherNow}>
               Now: {weather.current.temp}°C — {weather.current.weather?.[0]?.description}
@@ -98,10 +100,10 @@ export default function LandingPage() {
           )}
           {weather.daily && (
             <ul className={styles.weatherList}>
-              {weather.daily.slice(0, 5).map((d) => (
-                <li key={d.dt}>
-                  {new Date(d.dt * 1000).toLocaleDateString()} — {d.temp.day}°C —{" "}
-                  {d.weather?.[0]?.description}
+              {weather.daily.slice(0, 5).map((day) => (
+                <li key={day.dt}>
+                  {new Date(day.dt * 1000).toLocaleDateString()} — {day.temp.day}°C —{" "}
+                  {day.weather?.[0]?.description}
                 </li>
               ))}
             </ul>
