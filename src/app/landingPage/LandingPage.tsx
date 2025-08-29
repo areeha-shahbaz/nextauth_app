@@ -64,7 +64,7 @@ export default function LandingPage() {
       <h1 className={styles.heading}>Weather Forecast Map</h1>
 
       <LoadScript
-        googleMapsApiKey={process.env.NEXT_PUBLIC_GOOGLE_MAPS_KEY as string}
+        googleMapsApiKey={process.env.googleMapsApiKey as string}
         libraries={["places"]}
       >
         <Autocomplete
@@ -98,7 +98,7 @@ export default function LandingPage() {
               Now: {weather.current.temp}°C — {weather.current.weather?.[0]?.description}
             </p>
           )}
-          {weather.daily && (
+          {weather.daily && ( 
             <ul className={styles.weatherList}>
               {weather.daily.slice(0, 5).map((day) => (
                 <li key={day.dt}>
