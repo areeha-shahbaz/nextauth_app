@@ -6,4 +6,3 @@ const LandingPage = dynamic(() => import("./landingPage/LandingPage"), { ssr: fa
 export default function Page() {
   return <LandingPage />;
 }
-

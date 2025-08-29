@@ -1,123 +1,140 @@
 "use client";
 
-import React, { useRef, useState, useEffect } from "react";
-import { GoogleMap, LoadScript, Marker, Autocomplete } from "@react-google-maps/api";
+import { useState } from "react";
+import {
+  MapContainer,
+  TileLayer,
+  Marker,
+  useMapEvents,
+  useMap,
+} from "react-leaflet";
+import { LeafletMouseEvent } from "leaflet";
+import "leaflet/dist/leaflet.css";
 import styles from "./landing.module.css";
 
-type Coordinates = { lat: number; lng: number };
+
+interface WeatherCurrent {
+  temp: number;
+  weather?: { description: string }[];
+}
+
+interface WeatherDaily {
+  dt: number;
+  temp: { day: number };
+  weather?: { description: string }[];
+}
 
 interface WeatherData {
   timezone: string;
-  current?: { temp: number; weather?: { description: string; icon: string }[] };
-  daily?: { dt: number; temp: { day: number }; weather?: { description: string; icon: string }[] }[];
+  current?: WeatherCurrent;
+  daily?: WeatherDaily[];
 }
-
-const DEFAULT_LOCATION: Coordinates = { lat: 30.3753, lng: 69.3451 }; 
-const MAP_SIZE = { width: "100%", height: "100vh" }; 
-
 export default function LandingPage() {
-  const [markerPosition, setMarkerPosition] = useState<Coordinates | null>(null);
-  const [weather, setWeather] = useState<WeatherData | null>(null);
-  const autocompleteRef = useRef<google.maps.places.Autocomplete | null>(null);
+  const DEFAULT_LOCATION: [number, number] = [30.3753, 69.3451]; 
 
-  const fetchWeatherData = async (lat: number, lng: number) => {
+  const [marker, setMarker] = useState<[number, number] | null>(null);
+  const [weather, setWeather] = useState<WeatherData | null>(null);
+  const [city, setCity] = useState("");
+
+  const MapClickHandler = ({
+    setMarker,
+    fetchWeather,
+  }: {
+    setMarker: (coords: [number, number]) => void;
+    fetchWeather: (lat: number, lng: number) => void;
+  }) => {
+    useMapEvents({
+      click(e: LeafletMouseEvent) {
+        const coords: [number, number] = [e.latlng.lat, e.latlng.lng];
+        setMarker(coords);
+        fetchWeather(coords[0], coords[1]);
+      },
+    });
+    return null;
+  };
+  const SetMapView = ({ coords }: { coords: [number, number] }) => {
+    const map = useMap();
+    map.setView(coords, 5);
+    return null;
+  };
+
+  const fetchWeather = async (lat: number, lng: number) => {
     try {
-      const response = await fetch(`/api/weather?lat=${lat}&lon=${lng}`);
-      const data = await response.json();
+      const res = await fetch(`/api/weather?lat=${lat}&lon=${lng}`);
+      const data = await res.json();
       setWeather(data);
-    } catch (error) {
-      console.error("Failed to fetch weather data:", error);
+    } catch (err) {
+      console.error("Weather fetch error:", err);
     }
   };
 
-  useEffect(() => {
-    fetchWeatherData(DEFAULT_LOCATION.lat, DEFAULT_LOCATION.lng);
-  }, []);
-
-  const handlePlaceSelect = () => {
-    const place = autocompleteRef.current?.getPlace();
-    const location = place?.geometry?.location;
-    if (!location) return;
-
-    const lat = location.lat();
-    const lng = location.lng();
-    setMarkerPosition({ lat, lng });
-    fetchWeatherData(lat, lng);
-  };
-
-  const handleMapClick = (event: google.maps.MapMouseEvent) => {
-    const location = event.latLng;
-    if (!location) return;
-
-    const lat = location.lat();
-    const lng = location.lng();
-    setMarkerPosition({ lat, lng });
-    fetchWeatherData(lat, lng);
+  const handleCitySearch = async () => {
+    if (!city) return;
+    const res = await fetch(
+      `https://nominatim.openstreetmap.org/search?format=json&q=${city}`
+    );
+    const data = await res.json();
+    if (data && data.length > 0) {
+      const coords: [number, number] = [
+        parseFloat(data[0].lat),
+        parseFloat(data[0].lon),
+      ];
+      setMarker(coords);
+      fetchWeather(coords[0], coords[1]);
+    }
   };
 
   return (
     <div className={styles.pageContainer}>
-      <LoadScript
-        googleMapsApiKey={process.env.NEXT_PUBLIC_GOOGLE_MAPS_KEY as string}
-        libraries={["places"]}
+      <div className={styles.searchBar}>
+        <input
+          type="text"
+          placeholder="Search for a city..."
+          value={city}
+          onChange={(e) => setCity(e.target.value)}
+        />
+        <button onClick={handleCitySearch}>Search</button>
+      </div>
+
+      <MapContainer
+        center={marker ?? DEFAULT_LOCATION}
+        zoom={5}
+        scrollWheelZoom={true}
+        style={{ width: "100%", height: "100vh" }}
       >
-        <GoogleMap
-          mapContainerStyle={MAP_SIZE}
-          center={markerPosition ?? DEFAULT_LOCATION}
-          zoom={markerPosition ? 8 : 5}
-          onClick={handleMapClick}
-        >
-          {markerPosition && <Marker position={markerPosition} />}
-        </GoogleMap>
+        <TileLayer
+          {...{
+            url: "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
+            attribution:
+              '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
+          }}
+        />
+        {marker && <Marker position={marker} />}
+        {marker && <SetMapView coords={marker} />}
+        <MapClickHandler setMarker={setMarker} fetchWeather={fetchWeather} />
+      </MapContainer>
 
-        <div className={styles.searchWrapper}>
-          <Autocomplete
-            onLoad={(autocomplete) => (autocompleteRef.current = autocomplete)}
-            onPlaceChanged={handlePlaceSelect}
-          >
-            <input
-              type="text"
-              placeholder="Search for a city..."
-              className={styles.searchInput}
-            />
-          </Autocomplete>
+      {weather && (
+        <div className={styles.weatherOverlay}>
+          <h2>Weather — {weather.timezone}</h2>
+          {weather.current && (
+            <p>
+              Now: {weather.current.temp}°C —{" "}
+              {weather.current.weather?.[0]?.description}
+            </p>
+          )}
+          {weather.daily && (
+            <ul>
+              {weather.daily.slice(0, 5).map((day: WeatherDaily) => (
+                <li key={day.dt}>
+                  {new Date(day.dt * 1000).toLocaleDateString()} —{" "}
+                  {day.temp.day}°C — {day.weather?.[0]?.description}
+                </li>
+              ))}
+            </ul>
+          )}
         </div>
-
-        {weather && (
-          <div className={styles.weatherOverlay}>
-            <h2>Weather — {weather.timezone}</h2>
-
-            {weather.current && (
-              <div className={styles.currentWeather}>
-                <img
-                  src={`http://openweathermap.org/img/wn/${weather.current.weather?.[0]?.icon}@2x.png`}
-                  alt="icon"
-                />
-                <div>
-                  <p className={styles.currentTemp}>{weather.current.temp}°C</p>
-                  <p>{weather.current.weather?.[0]?.description}</p>
-                </div>
-              </div>
-            )}
-
-            {weather.daily && (
-              <div className={styles.dailyWeather}>
-                {weather.daily.slice(0, 5).map((day) => (
-                  <div key={day.dt} className={styles.weatherCard}>
-                    <p>{new Date(day.dt * 1000).toLocaleDateString()}</p>
-                    <img
-                      src={`http://openweathermap.org/img/wn/${day.weather?.[0]?.icon}@2x.png`}
-                      alt="icon"
-                    />
-                    <p>{day.temp.day}°C</p>
-                    <p>{day.weather?.[0]?.description}</p>
-                  </div>
-                ))}
-              </div>
-            )}
-          </div>
-        )}
-      </LoadScript>
+      )}
     </div>
   );
 }
