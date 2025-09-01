@@ -97,12 +97,6 @@ body {
   box-shadow: 0 4px 10px rgba(0,0,0,0.3);
 }
 
-.page-header .logo {
- font-size: 28px;
-  font-weight: bold;
-  cursor: pointer;
-}
-
 .page-header nav button {
   margin-left: 1rem;
   background: none;
