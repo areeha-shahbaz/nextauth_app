@@ -12,7 +12,7 @@ export default function Header() {
 
   return (
     <header className={styles.header}>
-      <div className="logo">LOGO</div>
+      <div className={styles.logo}>LOGO</div>
       <nav className={styles.nav}>
         <button className={styles.navBtn} onClick={() => router.push("/")}>Home</button>
         <button className={styles.navBtn} >Service</button>
