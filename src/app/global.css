@@ -87,7 +87,7 @@ body {
   color: white;
   text-align: center;
 }
-
+/* 
 .page-header {
   background: rgba(0, 0, 0, 0.95);
   padding: 1rem 2rem;
@@ -96,7 +96,12 @@ body {
   align-items: center;
   box-shadow: 0 4px 10px rgba(0,0,0,0.3);
 }
-
+.logo {
+  font-size: 28px;
+  font-weight:bold;
+  color: white;
+  cursor: pointer;
+}
 .page-header nav button {
   margin-left: 1rem;
   background: none;
@@ -109,7 +114,7 @@ body {
 
 .page-header nav button:hover {
   color: #cbcaca;
-}
+} */
 
 .page-main {
   flex: 1;
