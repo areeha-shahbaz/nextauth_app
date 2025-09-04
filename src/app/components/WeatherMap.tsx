@@ -4,6 +4,10 @@ import "leaflet/dist/leaflet.css";
 import { useState, useEffect } from "react";
 import styles from "./WeatherMap.module.css";
 import Header from "./header";  
+import Image from "next/image";
+
+
+
 interface Weather {
   name: string;
   country: string;
@@ -17,7 +21,7 @@ interface Weather {
 }
 interface WeatherProp{
   showSearch?: boolean;
-  preview?:boolean;
+
 }
 
 function FlyToLocation({ coords }: { coords: [number, number] | null }) {
@@ -66,7 +70,7 @@ function LocationMarker({ setWeather, setShowCard }: {
 }
 
 export default function WeatherMap( {
-  showSearch= true, preview=true,
+  showSearch= true, 
 }:WeatherProp) {
  
   const [weather, setWeather] = useState<Weather | null>(null);
@@ -132,10 +136,11 @@ export default function WeatherMap( {
           <h3>
             {weather.name}, {weather.country}
           </h3>
-          <img
-            src={`https://openweathermap.org/img/wn/${weather.icon}@2x.png`}
-            alt={weather.description}
-          />
+          <Image
+          src={`https://openweathermap.org/img/wn/${weather.icon}@2x.png`}
+          alt={weather.description}
+          width={100}
+          height={100}/>
           <p><strong>{Math.round(weather.temp)}°C</strong> ({weather.description})</p>
           <p>Feels like: {Math.round(weather.feels_like)}°C</p>
           <p>Humidity: {weather.humidity}%</p>
