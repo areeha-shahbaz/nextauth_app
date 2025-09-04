@@ -3,18 +3,59 @@
 // export default function ResetPasswordPage() {
 //   return <ResetPasswordClient />;
 // }
-import dynamic from "next/dynamic";
-import { Suspense } from "react";
+"use client";
+import { useState } from "react";
+import { useSearchParams, useRouter } from "next/navigation";
 
-const ResetPasswordClient = dynamic(
-  () => import("./ResetPasswordClient"),
-  { ssr: false } 
-);
+export default function ResetPasswordPage() {
+  const searchParams = useSearchParams();
+  const token = searchParams.get("token");
+  const router = useRouter();
 
-export default function Page() {
+  const [newPassword, setPassword] = useState("");
+  const [confirm, setConfirm] = useState("");
+  const [message, setMessage] = useState("");
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!token) return setMessage("Token is missing");
+    if (newPassword !== confirm) return setMessage("Passwords do not match");
+
+    try {
+      const res = await fetch("/api/users/resetpassword", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ token, newPassword }),
+      });
+      const data = await res.json();
+      setMessage(data.message || data.error);
+      if (data.success) setTimeout(() => router.push("/login"), 2000);
+    } catch {
+      setMessage("Something went wrong.");
+    }
+  };
+
   return (
-    <Suspense fallback={<div>Loading...</div>}>
-      <ResetPasswordClient />
-    </Suspense>
+    <div className="container">
+      <h1>Reset Password</h1>
+      <form onSubmit={handleSubmit}>
+        <input
+          type="password"
+          placeholder="New Password"
+          value={newPassword}
+          onChange={(e) => setPassword(e.target.value)}
+          required
+        />
+        <input
+          type="password"
+          placeholder="Confirm Password"
+          value={confirm}
+          onChange={(e) => setConfirm(e.target.value)}
+          required
+        />
+        <button type="submit">Reset</button>
+      </form>
+      {message && <p>{message}</p>}
+    </div>
   );
 }
