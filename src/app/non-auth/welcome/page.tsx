@@ -25,6 +25,8 @@ import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import Header from "../../components/header";
 import PageStyles from "./page.module.css";
+import Image from "next/image";
+<Image src="/map img.jpg" alt="Weather preview" width={400} height={300} />
 
 export default function WelcomePage() {
   const router = useRouter();
@@ -36,7 +38,7 @@ export default function WelcomePage() {
      const apiKey = process.env.NEXT_PUBLIC_WEATHER_API_KEY;
       const newTemps: { [key: string]: number | string } = {};
       
-      for (let city of cities) {
+      for (const city of cities) {
         try {
           const res = await fetch(
             `https://api.openweathermap.org/data/2.5/weather?q=${city}&units=metric&appid=${apiKey}`
@@ -68,7 +70,14 @@ return (
             <div className={PageStyles.weatherPreview}>
               <h3>Weather Map</h3>
                 <div className={PageStyles.previewImage}>
-                <img src="/map img.jpg" alt="Weather preview" />
+                <Image 
+                  src="/map img.jpg" 
+                  alt="Weather preview" 
+                  width={400} 
+                  height={300} 
+                  className={PageStyles.previewImage}
+                />
+
                 </div>
                 <button 
                   className={PageStyles.linkButton} 
