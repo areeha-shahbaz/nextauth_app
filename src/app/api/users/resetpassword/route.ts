@@ -37,11 +37,15 @@ export async function POST(req: NextRequest) {
       success: true,
       message: "Password reset successful",
     });
-  } catch (error: any) {
-    console.error("Reset password error:", error);
-    return NextResponse.json(
-      { success: false, message: error.message || "Server error" },
-      { status: 500 }
-    );
-  }
+  }  catch (error: unknown) {
+  console.error("Reset password error:", error);
+  return NextResponse.json(
+    {
+      success: false,
+      message:
+        error instanceof Error ? error.message : "Server error",
+    },
+    { status: 500 }
+  );
+}
 }

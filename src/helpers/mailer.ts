@@ -11,7 +11,7 @@ interface SendEmailParams {
   domain?: string;
 }
 const templatePath = path.join(process.cwd(), "src/template/emailTemplate.html");
-let htmlTemplate = fs.readFileSync(templatePath, "utf-8");
+const htmlTemplate = fs.readFileSync(templatePath, "utf-8");
 
 export const sendEmail = async ({ email, emailType, userId, domain }: SendEmailParams) => {
   try {

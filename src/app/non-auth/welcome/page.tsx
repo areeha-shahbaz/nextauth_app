@@ -24,7 +24,6 @@
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import Header from "../../components/header";
-import WeatherMap from "../../components/WeatherMap"; 
 import PageStyles from "./page.module.css";
 
 export default function WelcomePage() {
@@ -35,7 +34,7 @@ export default function WelcomePage() {
   useEffect(() => {
     async function fetchWeather(){
      const apiKey = process.env.NEXT_PUBLIC_WEATHER_API_KEY;
-      let newTemps: { [key: string]: number | string } = {};
+      const newTemps: { [key: string]: number | string } = {};
       
       for (let city of cities) {
         try {
