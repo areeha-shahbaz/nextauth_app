@@ -1,9 +1,15 @@
 "use client";
 import { useRouter } from "next/navigation";
 import { useState , useEffect} from "react";
+import { useDispatch} from "react-redux";
+import { login } from "src/store/authSlice";
+
+
 
  function LoginPage() {
   const router = useRouter();
+  
+  const dispatch = useDispatch();
   const [loading,setLoading]=useState(true);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -36,6 +42,7 @@ import { useState , useEffect} from "react";
       
         localStorage.setItem("token", data.token);
         localStorage.setItem("user", JSON.stringify(data.user));
+          dispatch(login(data.user));
 
         router.push("/non-auth/welcome");
       }
@@ -68,6 +75,10 @@ import { useState , useEffect} from "react";
           onChange={(e) => setPassword(e.target.value)}
           required
         />
+        <p>
+  <a href="/non-auth/forgotpassword">Forgot Password?</a>
+</p>
+
 
         <button type="submit">Log In</button>
       </form>

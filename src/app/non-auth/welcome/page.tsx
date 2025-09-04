@@ -1,50 +1,93 @@
 // "use client";
 // import { useRouter } from "next/navigation";
-// import { useEffect, useState } from "react";
-
+// import Header from "../../components/header";
 // export default function WelcomePage() {
 //   const router = useRouter();
-//   const [user, setUser] = useState<any>(null);
-
-//   useEffect(() => {
-//     const storedUser = localStorage.getItem("user");
-//     if (!storedUser) {
-//       router.replace("/login"); 
-//     } else {
-//       setUser(JSON.parse(storedUser));
-//     }
-//   }, [router]);
-
-//   if (!user) return null; // don’t render until user loaded
 
 //   return (
-//     <div className="container">
-//       <h1>Welcome {user.name} 🎉</h1>
-//       <p>Email: {user.email}</p>
-//       <button onClick={() => router.push("/home")}>Go to Home</button>
+   
+//     <div className="page-container">
+//       <Header/>
+//       <main className="page-main">
+//         <div className="overlay">
+//         <h2> Welcome!</h2>
+//         <p>You have successfully logged in. Click below to go to home page.</p>
+//         <button onClick={() => router.push("/auth/home")}>Go to Home</button>
+//         </div>
+//       </main>
 //     </div>
+
 //   );
 // }
 
-
 "use client";
+import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
+import Header from "../../components/header";
+import WeatherMap from "../../components/WeatherMap"; 
+import PageStyles from "./page.module.css";
 
 export default function WelcomePage() {
   const router = useRouter();
+  const [temps, setTemps] =useState<{[key:string ]:number | string}>({});
+  const cities = ["New York", "London", "Paris", "Tokyo", "Sydney", "Dubai"];
 
-  return (
-    
-    <div className="page-container">
-        
+  useEffect(() => {
+    async function fetchWeather(){
+     const apiKey = process.env.NEXT_PUBLIC_WEATHER_API_KEY;
+      let newTemps: { [key: string]: number | string } = {};
+      
+      for (let city of cities) {
+        try {
+          const res = await fetch(
+            `https://api.openweathermap.org/data/2.5/weather?q=${city}&units=metric&appid=${apiKey}`
+          );
+          const data = await res.json();
+          newTemps[city] = Math.round(data.main.temp);
+        } catch (err) {
+          console.error("error fetching the weather:", city, err);
+        }
+      }
+      setTemps(newTemps);
+    }
+  fetchWeather();
+    const interval = setInterval(fetchWeather, 300000);
+    return () => clearInterval(interval);
+  }, []);
+
+return (
+   <div className="page-container">
+     <Header/>    
       <main className="page-main">
-        <div className="overlay">
-        <h2> Welcome!</h2>
-        <p>You have successfully logged in. Click below to go to home page.</p>
-        <button onClick={() => router.push("/auth/home")}>Go to Home</button>
+        {/* <div className="overlay">
+          <p>Click here to go to home page.</p>
+          <button onClick={() => router.push("/auth/home")}>Go to Home</button>
+        </div> */}
+
+        <div className={PageStyles.weatherLayout}>
+          <div className={PageStyles.leftPanel}>
+            <div className={PageStyles.weatherPreview}>
+              <h3>Weather Map</h3>
+                <div className={PageStyles.previewImage}>
+                <img src="/map img.jpg" alt="Weather preview" />
+                </div>
+                <button 
+                  className={PageStyles.linkButton} 
+                  onClick={() => router.push("/weather")}>Open Map →</button>
+      </div>
+    </div>
+          <div className={PageStyles.rightPanel}>
+            <h3>City Temperatures</h3>
+            <div className={PageStyles.cityList}>
+              {cities.map((city) => (
+                <div key={city} className={PageStyles.cityItem}>
+                  {city}: {temps[city] !== undefined ? `${temps[city]}°C` : "Loading..."}
+                </div>
+              ))}
+            </div>
+          </div>
         </div>
       </main>
     </div>
-
   );
 }

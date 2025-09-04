@@ -87,7 +87,7 @@ body {
   color: white;
   text-align: center;
 }
-/* 
+
 .page-header {
   background: rgba(0, 0, 0, 0.95);
   padding: 1rem 2rem;
@@ -114,8 +114,7 @@ body {
 
 .page-header nav button:hover {
   color: #cbcaca;
-} */
-
+} 
 .page-main {
   flex: 1;
   display: flex;

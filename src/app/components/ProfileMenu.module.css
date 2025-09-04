@@ -1,0 +1,78 @@
+.profileMenu {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.avatarImg {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  object-fit: cover;
+  cursor: pointer;
+}
+
+.avatar {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #ccc;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.dropdown {
+  position: absolute;
+  right: 0;
+  margin-top:120px;
+  width: 240px;
+  background: #ffffff;
+  border: 1px solid #e5e7eb;
+  border-radius: 8px;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+  padding: 12px;
+  opacity: 0;
+  transform: translateY(-10px);
+  pointer-events: none;
+  transition: all 0.3s ease;
+  z-index: 50;
+}
+
+.profileMenu:hover .dropdown {
+  opacity: 1;
+  transform: translateY(0);
+  pointer-events: auto;
+}
+
+.editBtn {
+  display: block;
+  width: 100%;
+  padding: 8px;
+  background: #4cafef;
+  color: white;
+  border: none;
+  cursor: pointer;
+  border-radius: 6px;
+  margin-bottom: 6px;
+}
+.editBtn:hover {
+  background: #3a9ad9;
+}
+
+.logoutBtn {
+  width: 100%;
+  border: none;
+  background: #4461ef;
+  color: white;
+  border-radius: 8px;
+  padding: 8px 10px;
+  cursor: pointer;
+  font-weight: 600;
+}
+
+.logoutBtn:hover {
+  filter: brightness(0.95);
+}

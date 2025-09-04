@@ -1,0 +1,91 @@
+.body{
+  padding:0px;
+  margin:0px;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  color:none;
+  background-color:none;
+
+}
+.overlay {
+  text-align: center;
+  margin-bottom: 20px;
+
+}
+
+.weatherLayout {
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  gap: 5px;
+  flex-wrap: wrap;
+  
+}
+
+.leftPanel {
+  flex: 1;
+  min-width: 200px;
+  margin-top:20px;
+}
+.weatherPreview {
+  background : linear-gradient(135deg, #1e3c72, #1b325a); 
+  color : white;
+  border-radius: 16px;
+  padding: 1rem;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  min-height: 250px;
+}
+.h3{
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  color:white;
+}
+.previewImage img {
+  width: 100%;
+  margin: 0.5rem 0;
+}
+.linkButton {
+  display: inline-block;
+  padding: 0.5rem 1rem;
+  background: #0072f5da;
+  color: white;
+  border-radius: 5px;
+  font-weight:300;
+  font-size:medium;
+  border: none;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.linkButton:hover {
+  background: #445f7fda;
+}
+
+.rightPanel {
+  flex: 1;
+  min-width: 300px;
+  background: linear-gradient(135deg, #1e3c72, #1b325a); ;
+  margin-top:50px;
+  margin-left:100px;
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0 4px 6px rgba(0,0,0,0.5);
+}
+
+.cityList {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+  margin-top: 10px;
+}
+
+.cityItem {
+  background: #445f7fda;
+  padding: 10px;
+  border-radius: 5px;
+  text-align: center;
+  font-weight: bold;
+}

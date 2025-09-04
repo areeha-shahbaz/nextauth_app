@@ -13,6 +13,11 @@ interface Weather {
   humidity: number;
   wind: number;
   icon: string;
+   
+}
+interface WeatherProp{
+  showSearch?: boolean;
+  preview?:boolean;
 }
 
 function FlyToLocation({ coords }: { coords: [number, number] | null }) {
@@ -60,7 +65,10 @@ function LocationMarker({ setWeather, setShowCard }: {
   return null;
 }
 
-export default function WeatherMap() {
+export default function WeatherMap( {
+  showSearch= true, preview=true,
+}:WeatherProp) {
+ 
   const [weather, setWeather] = useState<Weather | null>(null);
   const [coords, setCoords] = useState<[number, number] | null>(null);
   const [showCard, setShowCard] = useState(false);
@@ -96,18 +104,21 @@ export default function WeatherMap() {
     <div className={styles.container}>
       <Header />  
 
+    {showSearch && (
       <div className={styles.searchBar}>
         <input
           type="text"
           value={city}
           onChange={(e) => setCity(e.target.value)}
-          placeholder="Search city..."
+          placeholder="Search city.."
           className={styles.input}
         />
         <button onClick={handleSearch} className={styles.button}>Search</button>
       </div>
-
-      <MapContainer center={[30.3753, 69.3451]} zoom={5} className={styles.map}>
+)} 
+  
+  
+      <MapContainer center={[30.3753, 69.3451]} zoom={5} zoomControl= {false} className={styles.map}>
         <TileLayer
           url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
           attribution="&copy; OpenStreetMap contributors"

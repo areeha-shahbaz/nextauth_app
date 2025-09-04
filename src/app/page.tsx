@@ -1,10 +1,16 @@
-"use client";
-import dynamic from "next/dynamic";
+// "use client";
+// import dynamic from "next/dynamic";
 
-const LandingPage = dynamic(() => import("./landingPage/LandingPage"), { ssr: false });
+// const LandingPage = dynamic(() => import("./landingPage/LandingPage"), { ssr: false });
 
-export default function Page() {
-  return <LandingPage />;
+// export default function Page() {
+//   return <LandingPage />;
+// }
+
+
+import { redirect } from "next/navigation";
+
+export default function LandingPage() {
+  redirect("/login");
+  return null;
 }
-
-
