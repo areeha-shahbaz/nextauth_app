@@ -44,14 +44,13 @@
 //   );
 // }
 
-
 "use client";
 import { useState } from "react";
 import { useSearchParams, useRouter } from "next/navigation";
 
 export default function ResetPasswordPage() {
   const searchParams = useSearchParams();
-  const token = searchParams.get("token");
+  const token: string | null = searchParams.get("token");
   const router = useRouter();
 
   const [newPassword, setPassword] = useState("");
@@ -71,6 +70,11 @@ export default function ResetPasswordPage() {
       return;
     }
 
+    if (newPassword.length < 6) {
+      setMessage("Password must be at least 6 characters.");
+      return;
+    }
+
     try {
       const res = await fetch("/api/users/resetpassword", {
         method: "POST",
@@ -78,7 +82,8 @@ export default function ResetPasswordPage() {
         body: JSON.stringify({ token, newPassword }),
       });
 
-      const data = await res.json();
+      const data = await res.json().catch(() => ({ error: "Invalid response" }));
+
       setMessage(data.message || data.error);
 
       if (data.success) {
@@ -91,7 +96,7 @@ export default function ResetPasswordPage() {
   };
 
   return (
-    <div className ="container">
+    <div className="container" key={token || "reset"}>
       <h1>Reset Password</h1>
       <form onSubmit={handleSubmit}>
         <input
@@ -114,4 +119,3 @@ export default function ResetPasswordPage() {
     </div>
   );
 }
-
