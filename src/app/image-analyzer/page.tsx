@@ -29,11 +29,11 @@ export default function ImageAnalyzer(){
     try{
         const formData =new FormData();
         formData.append("image", file);
-        const res = await fetch("/api/analyze",{
-            method: "POST",
-            body:formData,
+       const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/analyzeImage`, {
+  method: "POST",
+  body: formData,
+});
 
-        });
         const data = await res.json();
         if(!res.ok){
             setError(data.error || "failed to generate caption");
