@@ -72,8 +72,6 @@
 
 // }
 
-
-
 import connect from "src/dbConnection/dbConnection";
 import User from "src/models/userModel";
 import { NextRequest, NextResponse } from "next/server";
@@ -92,47 +90,38 @@ interface LoginRequest {
 
 export async function POST(req: NextRequest) {
   try {
-    // 1️⃣ Check environment variables
     if (!process.env.MONGODB_URI || !process.env.JWT_SECRET) {
-      console.error("Missing MONGODB_URI or JWT_SECRET in Vercel env");
+      console.error("Missing MONGODB_URI or JWT_SECRET in environment variables");
       return NextResponse.json(
         { success: false, error: "Server misconfiguration" },
         { status: 500 }
       );
     }
 
-    // 2️⃣ Connect to DB (use cached connection in dbConnection)
     await connect();
 
-    // 3️⃣ Parse request
     const { email, password } = (await req.json()) as LoginRequest;
     if (!email || !password) {
       return NextResponse.json(
-        { success: false, error: "Email and password required" },
+        { success: false, error: "Email and password are required" },
         { status: 400 }
       );
     }
-
-    // 4️⃣ Find user
     const user = await User.findOne({ email });
     if (!user) {
       return NextResponse.json({ success: false, error: "User not found" }, { status: 404 });
     }
 
-    // 5️⃣ Check password safely
     const isMatch = await bcryptjs.compare(password, user.passwordHash || "");
     if (!isMatch) {
       return NextResponse.json({ success: false, error: "Invalid credentials" }, { status: 401 });
     }
 
-    // 6️⃣ Sign JWT
     const token = jwt.sign(
       { id: user._id.toString(), email: user.email } as JwtPayload,
       process.env.JWT_SECRET,
       { expiresIn: "1h" }
     );
-
-    // 7️⃣ Return success
     return NextResponse.json({
       success: true,
       message: "Login successful",

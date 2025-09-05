@@ -21,7 +21,6 @@
 
 // export default connect;
 
-
 import mongoose from "mongoose";
 
 interface MongooseCache {
@@ -45,6 +44,7 @@ const connect = async () => {
 
     cached.promise = mongoose.connect(uri, { dbName: "myDatabase" }).then((m) => m);
   }
+
   cached.conn = await cached.promise;
   return cached.conn;
 };

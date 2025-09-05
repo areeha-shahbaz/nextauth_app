@@ -28,8 +28,9 @@ import { login } from "src/store/authSlice";
   }, [router]);
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
+    const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL || "";
     try {
-      const res = await fetch("/api/users/login", {
+      const res = await fetch(`${BASE_URL}/api/users/login`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ email, password }),
