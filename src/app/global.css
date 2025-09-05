@@ -17,13 +17,27 @@ body {
     font-size:1rem;
     font-weight:500;
 }
-.message.success{
-    color:#2e7d32;
+.ananlyze-button{
+ 
+  padding: 8px 16px;       
+  background-color: black;
+  color: white;
+  border: none;
+  border-radius: 6px;      
+  cursor: pointer;
+  transition: opacity 0.2s ease, transform 0.1s ease;
 }
 
-.message.error{
-    color:#d32f2f;
+.analyze-btn:hover:enabled {
+  opacity: 0.9;            
+  transform: scale(1.02);  
 }
+
+.analyze-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
 .container {
   background: #fff;
   padding: 2rem 2.5rem;
@@ -81,6 +95,7 @@ body {
 
 .page-container {
   min-height: 100vh;
+  min-width:100%;
   background: url('/bg.jpeg') center/cover no-repeat;
   display: flex;
   flex-direction: column;

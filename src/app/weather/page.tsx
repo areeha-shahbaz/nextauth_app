@@ -1,8 +1,16 @@
 "use client";
-import { useState } from "react";
-import WeatherMap from "src/app/components/WeatherMap";
+// import WeatherMap from "src/app/components/WeatherMap";
+
+// export default function WeatherPage() {
+
+//   return <WeatherMap />;
+// }
+import dynamic from "next/dynamic";
+
+const WeatherMap = dynamic(() => import("src/app/components/WeatherMap"), {
+  ssr: false,
+});
 
 export default function WeatherPage() {
-
   return <WeatherMap />;
 }

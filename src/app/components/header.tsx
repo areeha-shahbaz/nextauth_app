@@ -2,7 +2,7 @@
 import { useRouter } from "next/navigation";
 import styles from "./Header.module.css";
 import ProfileMenu from "./ProfileMenu";
-
+import ImageAnalyzer from "../image-analyzer/page";
 export default function Header() {
   const router = useRouter();
 
@@ -16,6 +16,9 @@ export default function Header() {
     <header className={styles.header}>
       <div className={styles.logo}>LOGO</div>
       <nav className={styles.nav}>
+        <button className={styles.navBtn} onClick={() => router.push("/image-analyzer")}>
+        Image Analyzer
+      </button>
       <button className={styles.navBtn} onClick={() => router.push("/weather")}>
         Weather Map
       </button>
