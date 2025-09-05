@@ -38,17 +38,36 @@ export default function WelcomePage() {
      const apiKey = process.env.NEXT_PUBLIC_WEATHER_API_KEY;
       const newTemps: { [key: string]: number | string } = {};
       
+      // for (const city of cities) {
+      //   try {
+      //     const res = await fetch(
+      //       `https://api.openweathermap.org/data/2.5/weather?q=${city}&units=metric&appid=${apiKey}`
+      //     );
+      //     const data = await res.json();
+      //     newTemps[city] = Math.round(data.main.temp);
+      //   } catch (err) {
+      //     console.error("error fetching the weather:", city, err);
+      //   }
+      // }
       for (const city of cities) {
-        try {
-          const res = await fetch(
-            `https://api.openweathermap.org/data/2.5/weather?q=${city}&units=metric&appid=${apiKey}`
-          );
-          const data = await res.json();
-          newTemps[city] = Math.round(data.main.temp);
-        } catch (err) {
-          console.error("error fetching the weather:", city, err);
-        }
-      }
+  try {
+    const res = await fetch(
+      `https://api.openweathermap.org/data/2.5/weather?q=${city}&units=metric&appid=${apiKey}`
+    );
+    const data = await res.json();
+
+    if (res.ok && data.main) {
+      newTemps[city] = Math.round(data.main.temp);
+    } else {
+      console.error("Weather fetch failed for", city, data);
+      newTemps[city] = "Error"; // optional fallback
+    }
+  } catch (err) {
+    console.error("error fetching the weather:", city, err);
+    newTemps[city] = "Error"; // optional fallback
+  }
+}
+
       setTemps(newTemps);
     }
   fetchWeather();

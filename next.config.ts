@@ -15,6 +15,23 @@ const nextConfig: NextConfig = {
       },
     ];
   },
+
+  experimental: {
+    serverActions: {
+      bodySizeLimit: '10mb', // increase body size for image uploads
+    },
+  },
+
+  images: {
+    domains: ['openweathermap.org'], 
+    remotePatterns: [
+      {
+        protocol: "https",
+        hostname: "openweathermap.org",
+        pathname: "/img/wn/**",
+      },
+    ],
+  },
 };
 
 export default nextConfig;
