@@ -15,6 +15,12 @@ interface LoginRequest {
 }
 
 export async function POST(req: NextRequest) {
+  if (!process.env.MONGODB_URI) {
+  console.error(" Missing MONGODB_URI in Vercel env");
+}
+if (!process.env.JWT_SECRET) {
+  console.error("Missing JWT_SECRET in Vercel env");
+}
   await connect();
 
   try {
@@ -53,11 +59,15 @@ export async function POST(req: NextRequest) {
         profileImage: user.profileImage || "",
       },
     });
-  } catch (error) {
+
+  }  
+ 
+  catch (error) {
     console.error("Login error:", error);
     return NextResponse.json(
       { success: false, error: "Server error" },
       { status: 500 }
     );
   }
+
 }
