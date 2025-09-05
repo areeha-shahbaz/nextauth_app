@@ -164,9 +164,9 @@ export async function POST(req: NextRequest) {
       },
     });
 
-  } catch (error: any) {
-    // Step 8: Log detailed error for debugging
-    console.error("Login error:", error.message, error.stack);
+  } 
+   catch (error) {
+    console.error("Login error:", error);
     return NextResponse.json(
       { success: false, error: "Server error" },
       { status: 500 }
