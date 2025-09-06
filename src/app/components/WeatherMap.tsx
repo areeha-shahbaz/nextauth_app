@@ -1,172 +1,3 @@
-"use client";
-
-import { MapContainer, TileLayer, useMapEvents, useMap } from "react-leaflet";
-import "leaflet/dist/leaflet.css";
-import { useState, useEffect } from "react";
-import styles from "./WeatherMap.module.css";
-import Header from "./header";
-import Image from "next/image";
-
-interface Weather {
-  name: string;
-  country: string;
-  temp: number;
-  description: string;
-  feels_like: number;
-  humidity: number;
-  wind: number;
-  icon: string;
-}
-
-interface WeatherProp {
-  showSearch?: boolean;
-}
-
-function FlyToLocation({ coords }: { coords: [number, number] | null }) {
-  const map = useMap();
-  useEffect(() => {
-    if (coords) map.flyTo(coords, 5);
-  }, [coords, map]);
-  return null;
-}
-
-function LocationMarker({
-  setWeather,
-  setShowCard,
-  setCoords,
-}: {
-  setWeather: (w: Weather) => void;
-  setShowCard: (v: boolean) => void;
-  setCoords: (c: [number, number]) => void;
-}) {
-  useMapEvents({
-    click: async (e) => {
-      const { lat, lng } = e.latlng;
-      try {
-        const res = await fetch(`/api/weather?lat=${lat}&lon=${lng}`);
-        const data = await res.json();
-
-        if (!data || data.error) {
-          console.error("Weather fetch failed:", data?.error);
-          return;
-        }
-
-        setWeather({
-          name: data.name,
-          country: data.sys.country,
-          temp: data.main.temp,
-          description: data.weather[0].description,
-          feels_like: data.main.feels_like,
-          humidity: data.main.humidity,
-          wind: data.wind.speed,
-          icon: data.weather[0].icon,
-        });
-        setCoords([lat, lng]);
-        setShowCard(true);
-      } catch (err) {
-        console.error("Weather API failed:", err);
-      }
-    },
-  });
-  return null;
-}
-
-export default function WeatherMap({ showSearch = true }: WeatherProp) {
-  const [weather, setWeather] = useState<Weather | null>(null);
-  const [coords, setCoords] = useState<[number, number] | null>(null);
-  const [showCard, setShowCard] = useState(false);
-  const [city, setCity] = useState("");
-
-  const handleSearch = async () => {
-    if (!city) return;
-
-    try {
-      const res = await fetch(`/api/weather?city=${encodeURIComponent(city)}`);
-      const data = await res.json();
-
-      if (!data || data.error) {
-        console.error("Weather fetch failed:", data?.error);
-        return;
-      }
-
-      setWeather({
-        name: data.name,
-        country: data.sys.country,
-        temp: data.main.temp,
-        description: data.weather[0].description,
-        feels_like: data.main.feels_like,
-        humidity: data.main.humidity,
-        wind: data.wind.speed,
-        icon: data.weather[0].icon,
-      });
-      setCoords([data.coord.lat, data.coord.lon]);
-      setShowCard(true);
-    } catch (err) {
-      console.error("Search failed:", err);
-    }
-  };
-
-  return (
-    <div className={styles.container}>
-      <Header />
-
-      {showSearch && (
-        <div className={styles.searchBar}>
-          <input
-            type="text"
-            value={city}
-            onChange={(e) => setCity(e.target.value)}
-            placeholder="Search city..."
-            className={styles.input}
-          />
-          <button onClick={handleSearch} className={styles.button}>
-            Search
-          </button>
-        </div>
-      )}
-
-      <MapContainer
-        center={[30.3753, 69.3451]}
-        zoom={5}
-        zoomControl={false}
-        className={styles.map}
-      >
-        <TileLayer
-          url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-          attribution="&copy; OpenStreetMap contributors"
-        />
-        <LocationMarker
-          setWeather={setWeather}
-          setShowCard={setShowCard}
-          setCoords={setCoords}
-        />
-        <FlyToLocation coords={coords} />
-      </MapContainer>
-
-      {showCard && weather && (
-        <div className={styles.card}>
-          <h3>
-            {weather.name}, {weather.country}
-          </h3>
-          <Image
-            src={`https://openweathermap.org/img/wn/${weather.icon}@2x.png`}
-            alt={weather.description}
-            width={100}
-            height={100}
-          />
-          <p>
-            <strong>{Math.round(weather.temp)}°C</strong> ({weather.description})
-          </p>
-          <p>Feels like: {Math.round(weather.feels_like)}°C</p>
-          <p>Humidity: {weather.humidity}%</p>
-          <p>Wind: {weather.wind} m/s</p>
-        </div>
-      )}
-    </div>
-  );
-}
-
-
 // "use client";
 
 // import { MapContainer, TileLayer, useMapEvents, useMap } from "react-leaflet";
@@ -215,25 +46,23 @@ export default function WeatherMap({ showSearch = true }: WeatherProp) {
 //         const res = await fetch(`/api/weather?lat=${lat}&lon=${lng}`);
 //         const data = await res.json();
 
-//         if ("error" in data) {
-//           console.error("Weather fetch failed for coordinates:", lat, lng, data.error);
+//         if (!data || data.error) {
+//           console.error("Weather fetch failed:", data?.error);
 //           return;
 //         }
 
-//         if (data && data.main) {
-//           setWeather({
-//             name: data.name,
-//             country: data.sys.country,
-//             temp: data.main.temp,
-//             description: data.weather[0].description,
-//             feels_like: data.main.feels_like,
-//             humidity: data.main.humidity,
-//             wind: data.wind.speed,
-//             icon: data.weather[0].icon,
-//           });
-//           setCoords([lat, lng]);
-//           setShowCard(true);
-//         }
+//         setWeather({
+//           name: data.name,
+//           country: data.sys.country,
+//           temp: data.main.temp,
+//           description: data.weather[0].description,
+//           feels_like: data.main.feels_like,
+//           humidity: data.main.humidity,
+//           wind: data.wind.speed,
+//           icon: data.weather[0].icon,
+//         });
+//         setCoords([lat, lng]);
+//         setShowCard(true);
 //       } catch (err) {
 //         console.error("Weather API failed:", err);
 //       }
@@ -251,29 +80,27 @@ export default function WeatherMap({ showSearch = true }: WeatherProp) {
 //   const handleSearch = async () => {
 //     if (!city) return;
 
-//     try {const res = await fetch(`/api/weather?city=${city}`);
-// const data = await res.json();
+//     try {
+//       const res = await fetch(`/api/weather?city=${encodeURIComponent(city)}`);
+//       const data = await res.json();
 
-// if ("error" in data) {
-//   console.error("Weather fetch failed:", data.error);
-//   return;
-// }
+//       if (!data || data.error) {
+//         console.error("Weather fetch failed:", data?.error);
+//         return;
+//       }
 
-// if (data && data.main) {
-//   setWeather({
-//     name: data.name,
-//     country: data.sys.country,
-//     temp: data.main.temp,
-//     description: data.weather[0].description,
-//     feels_like: data.main.feels_like,
-//     humidity: data.main.humidity,
-//     wind: data.wind.speed,
-//     icon: data.weather[0].icon,
-//   });
-//   setCoords([data.coord.lat, data.coord.lon]);
-//   setShowCard(true);
-// }
-
+//       setWeather({
+//         name: data.name,
+//         country: data.sys.country,
+//         temp: data.main.temp,
+//         description: data.weather[0].description,
+//         feels_like: data.main.feels_like,
+//         humidity: data.main.humidity,
+//         wind: data.wind.speed,
+//         icon: data.weather[0].icon,
+//       });
+//       setCoords([data.coord.lat, data.coord.lon]);
+//       setShowCard(true);
 //     } catch (err) {
 //       console.error("Search failed:", err);
 //     }
@@ -338,3 +165,142 @@ export default function WeatherMap({ showSearch = true }: WeatherProp) {
 //     </div>
 //   );
 // }
+
+"use client";
+
+import { MapContainer, TileLayer, useMapEvents, useMap } from "react-leaflet";
+import "leaflet/dist/leaflet.css";
+import { useState, useEffect } from "react";
+import styles from "./WeatherMap.module.css";
+import Header from "./header";
+import Image from "next/image";
+
+interface Weather {
+  name: string;
+  country: string;
+  temp: number;
+  description: string;
+  feels_like: number;
+  humidity: number;
+  wind: number;
+  icon: string;
+}
+
+export default function WeatherMap() {
+  const [weather, setWeather] = useState<Weather | null>(null);
+  const [coords, setCoords] = useState<[number, number] | null>(null);
+  const [showCard, setShowCard] = useState(false);
+  const [city, setCity] = useState("");
+
+  const handleSearch = async () => {
+    if (!city) return;
+    try {
+      const res = await fetch(`/api/weather?city=${city}`);
+      const data = await res.json();
+
+      if (data.error) {
+        console.error("Weather fetch failed:", data.error);
+        return;
+      }
+
+      setWeather({
+        name: data.name,
+        country: data.sys.country,
+        temp: data.main.temp,
+        description: data.weather[0].description,
+        feels_like: data.main.feels_like,
+        humidity: data.main.humidity,
+        wind: data.wind.speed,
+        icon: data.weather[0].icon,
+      });
+      setCoords([data.coord.lat, data.coord.lon]);
+      setShowCard(true);
+    } catch (err) {
+      console.error("Search failed:", err);
+    }
+  };
+
+  function FlyToLocation({ coords }: { coords: [number, number] | null }) {
+    const map = useMap();
+    useEffect(() => {
+      if (coords) map.flyTo(coords, 5);
+    }, [coords, map]);
+    return null;
+  }
+
+  function LocationMarker() {
+    useMapEvents({
+      click: async (e) => {
+        const { lat, lng } = e.latlng;
+        try {
+          const res = await fetch(`/api/weather?lat=${lat}&lon=${lng}`);
+          const data = await res.json();
+          if (data.error) return;
+
+          setWeather({
+            name: data.name,
+            country: data.sys.country,
+            temp: data.main.temp,
+            description: data.weather[0].description,
+            feels_like: data.main.feels_like,
+            humidity: data.main.humidity,
+            wind: data.wind.speed,
+            icon: data.weather[0].icon,
+          });
+          setCoords([lat, lng]);
+          setShowCard(true);
+        } catch (err) {
+          console.error("Weather API failed:", err);
+        }
+      },
+    });
+    return null;
+  }
+
+  return (
+    <div className={styles.container}>
+      <Header />
+      <div className={styles.searchBar}>
+        <input
+          type="text"
+          value={city}
+          onChange={(e) => setCity(e.target.value)}
+          placeholder="Search city..."
+          className={styles.input}
+        />
+        <button onClick={handleSearch} className={styles.button}>
+          Search
+        </button>
+      </div>
+
+      <MapContainer center={[30.3753, 69.3451]} zoom={5} className={styles.map}>
+        <TileLayer
+          url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+          attribution="&copy; OpenStreetMap contributors"
+        />
+        <LocationMarker />
+        <FlyToLocation coords={coords} />
+      </MapContainer>
+
+      {showCard && weather && (
+        <div className={styles.card}>
+          <h3>
+            {weather.name}, {weather.country}
+          </h3>
+          <Image
+            src={`https://openweathermap.org/img/wn/${weather.icon}@2x.png`}
+            alt={weather.description}
+            width={100}
+            height={100}
+          />
+          <p>
+            <strong>{Math.round(weather.temp)}°C</strong> ({weather.description})
+          </p>
+          <p>Feels like: {Math.round(weather.feels_like)}°C</p>
+          <p>Humidity: {weather.humidity}%</p>
+          <p>Wind: {weather.wind} m/s</p>
+        </div>
+      )}
+    </div>
+  );
+}
