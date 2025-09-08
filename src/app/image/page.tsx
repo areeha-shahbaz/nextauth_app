@@ -1,10 +1,10 @@
 "use client";
 import dynamic from "next/dynamic";
 
-const WeatherMap = dynamic(() => import("src/app/components/image-analyzer/page"), {
+const ImageAnalyzer = dynamic(() => import("src/app/components/image-analyzer"), {
   ssr: false, 
 });
 
-export default function ImageAnalyzer() {
+export default function ImagePage() {
   return <ImageAnalyzer/>;
 }
