@@ -42,6 +42,21 @@ const userSchema = new mongoose.Schema(
       type: String, 
       default: "",
     },
+     role: {
+      type: String,
+      enum: ["admin","user"],
+      default: "user",
+      required: true,
+    }, status: {
+      type: String,
+      enum:["active", "deactive"],
+      default: "active",
+      required: true,
+    },
+    mustChangePassword:{
+      type:Boolean,
+      default:false,
+    },
   },
   { timestamps: true }
 );

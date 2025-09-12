@@ -7,11 +7,12 @@
 body {
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
   background: linear-gradient(135deg, #15173f, #6b72f4);
-  height: 100vh;
+  min-height: 100vh;
   display: flex;
   align-items: center;
   justify-content: center;
 }
+
 .message{
     margin-top:1rem;
     font-size:1rem;

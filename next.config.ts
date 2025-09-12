@@ -1,8 +1,9 @@
 import type { NextConfig } from "next";
 
+
 const nextConfig: NextConfig = {
   async redirects() {
-    return [
+    return [ 
       {
         source: '/login',
         destination: '/non-auth/login',
@@ -32,6 +33,7 @@ const nextConfig: NextConfig = {
       },
     ],
   },
+  outputFileTracingRoot: __dirname,
 };
 
 export default nextConfig;

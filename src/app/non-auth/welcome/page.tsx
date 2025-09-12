@@ -73,7 +73,7 @@ export default function WelcomePage() {
   fetchWeather();
     const interval = setInterval(fetchWeather, 300000);
     return () => clearInterval(interval);
-  }, []);
+  }, [cities]);
 
 return (
    <div className="page-container">

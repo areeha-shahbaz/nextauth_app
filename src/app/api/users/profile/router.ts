@@ -6,6 +6,7 @@ import jwt from "jsonwebtoken";
 interface JwtPayload {
   id: string;
   email: string;
+  role: string;
 }
 export async function GET(req: NextRequest) {
  
@@ -25,7 +26,15 @@ export async function GET(req: NextRequest) {
       return NextResponse.json({ error: "User not found" }, { status: 404 });
     }
 
-    return NextResponse.json({ user });
+    return NextResponse.json({
+       user:{
+      id: user._id,
+      name: user.name,
+      email:user.email,
+      role:user.role,
+      status:user.status,
+      profileImage:user.profileIamge
+    } });
   } catch (error: unknown) {
     if (error instanceof Error) {
       return NextResponse.json({ error: error.message }, { status: 500 });

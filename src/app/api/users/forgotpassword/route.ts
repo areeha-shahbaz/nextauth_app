@@ -2,7 +2,6 @@ import connect from "src/dbConnection/dbConnection";
 import User from "src/models/userModel";
 import { NextRequest, NextResponse } from "next/server";
 import { sendEmail } from "src/helpers/mailer";
-
 export async function POST(request: NextRequest) {
   await connect();
   try {

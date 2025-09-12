@@ -3,6 +3,7 @@ import {useRequireAuth} from "../../../authCondition";
  function LearnMorePage(){
     useRequireAuth();
     return(
+       
         <div className="page-container">
             <main className="page-main">
                 <div className="overlay">

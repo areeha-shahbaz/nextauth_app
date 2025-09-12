@@ -1,0 +1,57 @@
+.message{
+  margin-bottom:10px;
+  font-weight:400px;
+  font-size: medium;
+  color:slategrey;
+
+}
+.profileform {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.formgroup {
+  display: flex;
+  flex-direction: row;
+}
+
+.formgroup label {
+  font-weight: 600;
+  margin-top:5px;
+  margin-left:5px;
+  margin-bottom: 5px;
+  color: #555;
+}
+
+.formgroup input {
+  padding: 10px;
+  margin-top:0px;
+  margin-left:5px;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  font-size: 16px;
+}
+
+.formgroup .info {
+  font-weight: bold;
+  margin-left:5px;
+  text-transform: capitalize;
+  color: #333;
+  margin-top: 5px;
+}
+
+.btn {
+  background-color: #007bff;
+  color: #fff;
+  padding: 12px;
+  border: none;
+  border-radius: 6px;
+  font-size: 16px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.btn:hover {
+  background-color: #0056b3;
+}

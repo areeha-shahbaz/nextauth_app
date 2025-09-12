@@ -16,10 +16,12 @@ const [email, setEmail] = useState(user?.email || "");
 const [profileImage, setProfileImage] = useState("");
 
 useEffect(() => {
+  console.log("User data:", user);
   if (user?.profileImage) {
     setProfileImage(user.profileImage);
   }
 }, [user]);
+
 
 useEffect(() => {
   const storedName = localStorage.getItem("name");

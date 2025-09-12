@@ -1,5 +1,6 @@
 "use client";
 import { useState } from "react";
+import Header from "./header";
 
 export default function ImageAnalyzer() {
   const [file, setFile] = useState<File | null>(null);
@@ -70,7 +71,10 @@ export default function ImageAnalyzer() {
   };
 
   return (
+    <div className="cont.">
+    <Header/>
     <main className="container">
+     
       <h1 className="heeading_Img">AI Image Analyzer</h1>
 
       <input
@@ -105,5 +109,6 @@ export default function ImageAnalyzer() {
         </div>
       )}
     </main>
+    </div>
   );
 }

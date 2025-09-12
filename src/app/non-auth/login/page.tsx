@@ -1,31 +1,43 @@
 "use client";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { useState , useEffect} from "react";
 import { useDispatch} from "react-redux";
 import { login } from "src/store/authSlice";
+import {Suspense} from "react";
 
-
-
- function LoginPage() {
+ function LoginPageInner() {
   const router = useRouter();
-  
+  const searchParams= useSearchParams();
   const dispatch = useDispatch();
   const [loading,setLoading]=useState(true);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [message, setMessage] = useState("");
 
-    useEffect(() => {
+ useEffect(() => {
+  const tokenFromUrl = searchParams.get("token");
 
-    const token = localStorage.getItem("token");
-    if (!token) {
+ if (tokenFromUrl) {
       setLoading(false);
-
-    }else{
-            router.replace("/non-auth/welcome"); 
-
+    return;
     }
-  }, [router]);
+    const token = localStorage.getItem("token");
+  const user = localStorage.getItem("user");
+  if (!token || !user) {
+    setLoading(false);
+    return;
+  } 
+  // else {
+  //   const parsedUser = JSON.parse(user);
+  //   if (parsedUser.mustChangePassword) {
+  //     router.replace("/non-auth/reset-password");
+  //   } else {
+  //     router.replace("/non-auth/welcome");
+  //   }
+  
+  setLoading(false);
+}, [router, searchParams]);
+
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
     const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL || "";
@@ -39,14 +51,21 @@ import { login } from "src/store/authSlice";
       const data = await res.json();
       setMessage(data.message || data.error);
 
-      if (data.success) {
-      
-        localStorage.setItem("token", data.token);
-        localStorage.setItem("user", JSON.stringify(data.user));
-          dispatch(login(data.user));
+        if (data.success) {
+      localStorage.setItem("token", data.token);
+      localStorage.setItem("user", JSON.stringify(data.user));
+      dispatch(login(data.user));
 
+      if (data.mustChangePassword) {
+        router.push("/non-auth/reset-password");
+
+}
+
+       else {
         router.push("/non-auth/welcome");
       }
+    }
+
     } catch (err) {
       setMessage("Something went wrong");
       console.error(err);
@@ -90,5 +109,11 @@ import { login } from "src/store/authSlice";
     </div>
   );
 }
-export default LoginPage;
+export default function LoginPage(){
+  return (
+    <Suspense fallback={<p>Loading page...</p>}>
+      <LoginPageInner />
+    </Suspense>
+  );
+}
 

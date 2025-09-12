@@ -62,6 +62,19 @@ a {
   text-decoration: none;
   background-color: transparent; 
 }
+
+    .password-box {
+      display: inline-block;
+      padding: 10px 15px;
+      margin: 10px 0;
+      font-size: 16px;
+      background-color: #f3f3f3;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+      font-weight: bold;
+      letter-spacing: 1px;
+      color: #222;
+    }
     .footer {
     margin-top: 30px;
     font-size: 12px;
@@ -96,6 +109,8 @@ a {
     <div class="container">
         <h1>{{title}}</h1>
         <p>{{message}}</p>
+        {{tempPasswordSection}}
+
         <a href="{{link}}" class="button">{{buttonText}}</a>
          <p>{{secondarymessage}}</p>
     <div class="footer">
@@ -105,6 +120,7 @@ a {
         <a href="{{instagramLink}}">Instagram</a> |
         <a href="{{youtubeLink}}">YouTube</a> |
         <a href="{{linkedinLink}}">LinkedIn</a>
+        
       </div>
       760 Market Street, Floor 10<br>
       San Francisco, CA, 94102
