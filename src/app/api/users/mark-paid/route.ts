@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import connect from "src/dbConnection/dbConnection";
 import User from "src/models/userModel";
+export const runtime = 'nodejs';
 
 export async function POST(req: Request) {
   try {

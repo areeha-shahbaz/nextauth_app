@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import Stripe from "stripe";
 import connect from "src/dbConnection/dbConnection";
 import User from "src/models/userModel";
-
+export const runtime = 'nodejs';
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!);
 
 // export async function POST(req: NextRequest) {
