@@ -57,6 +57,10 @@ const userSchema = new mongoose.Schema(
       type:Boolean,
       default:false,
     },
+    hasPaid: {
+       type: Boolean,
+        default: false 
+      },
   },
   { timestamps: true }
 );

@@ -5,7 +5,12 @@ import { Provider, useDispatch } from "react-redux";
 import { store } from "src/store/store";
 import { useEffect } from "react";
 import { login } from "src/store/authSlice";
+import { Elements } from "@stripe/react-stripe-js";
+import { loadStripe } from "@stripe/stripe-js";
 
+const stripePromise = loadStripe(
+  process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY!
+);
 function HydrateAuth({ children }: { children: React.ReactNode }) {
   const dispatch = useDispatch();
 
@@ -30,7 +35,9 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
     <html lang="en">
       <body>
         <Provider store={store}>
-          <HydrateAuth>{children}</HydrateAuth>
+          <HydrateAuth>
+            <Elements stripe={stripePromise}>{children}</Elements>
+          </HydrateAuth>
         </Provider>
       </body>
     </html>

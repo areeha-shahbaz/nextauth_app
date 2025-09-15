@@ -19,10 +19,12 @@ export async function GET(req: NextRequest) {
     }
 
     const token = authHeader.split(" ")[1];
+    console.log(token);
     const decoded = jwt.verify(token, process.env.JWT_SECRET!) as JwtPayload;
 
     const user = await User.findById(decoded.id).select("-passwordHash");
     if (!user) {
+      console.log(" the user does not exist ")
       return NextResponse.json({ error: "User not found" }, { status: 404 });
     }
 
@@ -33,7 +35,8 @@ export async function GET(req: NextRequest) {
       email:user.email,
       role:user.role,
       status:user.status,
-      profileImage:user.profileIamge
+      profileImage:user.profileImage,
+      hasPaid: user.hasPaid,
     } });
   } catch (error: unknown) {
     if (error instanceof Error) {
