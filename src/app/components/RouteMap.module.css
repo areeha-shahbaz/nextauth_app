@@ -1,0 +1,129 @@
+.container {
+  display: flex;
+  flex-direction: row;
+  height: 100vh;
+  width: 100vw; 
+  font-family: "Inter", sans-serif;
+  background: #f4f6f8;
+}
+
+.layout {
+  display: flex;
+  flex-direction: column;
+  width: 300px;
+  background: #ffffff;
+  border-right: 1px solid #e0e0e0;
+  box-shadow: 2px 0 10px rgba(0, 0, 0, 0.05);
+}
+
+.leftPanel {
+  flex: 1;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.leftPanel h3 {
+  margin-bottom: 10px;
+}
+
+.leftPanel ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.leftPanel li {
+  padding: 8px;
+  border-radius: 6px;
+  background: #f4f6f8;
+  margin-bottom: 6px;
+  font-size: 14px;
+}
+
+.mapWrapper {
+  flex: 1;
+  position: relative;
+  margin-top:40px;
+ width:100%;
+}
+
+.inputs {
+  position: absolute;
+  top: 20px;
+  left: 30%;
+  transform: translateX(-50%);
+  background: #fff;
+  padding: 10px;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  display: flex;
+  gap: 8px;
+  z-index: 1000;
+}
+
+.inputs input {
+  padding: 8px 10px;
+  border-radius: 6px;
+  border: 1px solid #d1d5db;
+  font-size: 14px;
+  width: 180px;
+}
+
+.inputs button {
+  padding: 8px 14px;
+  border: none;
+  border-radius: 6px;
+  background: #1976d2;
+  color: white;
+  cursor: pointer;
+  font-size: 14px;
+}
+
+.inputs button:hover {
+  background: #155fa0;
+}
+.suggestions {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  right: 0;
+  background: white;
+  border: 1px solid #ccc;
+  max-height: 150px;
+  overflow-y: auto;
+  z-index: 1000;
+  transition: opacity 0.2s ease;
+  opacity: 1;
+}
+
+.suggestions.hidden {
+  opacity: 0;
+  pointer-events: none;
+}
+
+.suggestions li{
+  padding:5px 10px;
+  cursor:pointer;
+}
+.suggestions li:hover{
+  background-color: #eee;
+}
+.loader {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background: rgba(255,255,255,0.9);
+  padding: 20px 30px;
+  border-radius: 8px;
+  font-weight: bold;
+  z-index: 2000;
+}
+
+.mapContainer {
+  height: 100%;
+  z-index:0;
+    width: 100%;
+}

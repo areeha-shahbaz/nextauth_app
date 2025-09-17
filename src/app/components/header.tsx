@@ -32,6 +32,9 @@ useEffect(()=>{
     <header className={styles.header}>
       <div className={styles.logo}>LOGO</div>
       <nav className={styles.nav}>
+        <button className={styles.navBtn} onClick={()=> router.push("/map")}>
+          Map
+        </button>
         <button className={styles.navBtn} onClick={() => router.push("/image")}>
         Image Analyzer
       </button>

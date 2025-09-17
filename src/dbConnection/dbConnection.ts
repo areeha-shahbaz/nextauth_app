@@ -1,26 +1,3 @@
-// import mongoose from "mongoose";
-// import dotenv from "dotenv";
-// dotenv.config();
-// let isConnected = false;
-
-// const connect = async () => {
-//   if (isConnected) return;
-
-//   try {
-//     const uri = process.env.MONGODB_URI;
-//     if (!uri) throw new Error("MONGODB_URI is not defined in environment variables");
-
-//     await mongoose.connect(uri, { dbName: "myDatabase" });
-//     isConnected = true;
-//     console.log("MongoDB connected");
-//   } catch (err) {
-//     console.error("MongoDB connection error:", err);
-//     throw err;
-//   }
-// };
-
-// export default connect;
-
 import mongoose from "mongoose";
 
 interface MongooseCache {
@@ -40,9 +17,13 @@ const connect = async () => {
 
   if (!cached.promise) {
     const uri = process.env.MONGODB_URI;
-    if (!uri) throw new Error("MONGODB_URI is not defined");
+    if (!uri) {
+      console.error("mongodb is not defined in env");
+      throw new Error("MONGODB_URI is not defined");
+    }
+    // cached.promise = mongoose.connect(uri, { dbName: "myDatabase" }).then((m) => m);
+    cached.promise = mongoose.connect(uri!).then((m) => m);
 
-    cached.promise = mongoose.connect(uri, { dbName: "myDatabase" }).then((m) => m);
   }
 
   cached.conn = await cached.promise;
