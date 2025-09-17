@@ -25,10 +25,12 @@ import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import Header from "../../components/header";
 import PageStyles from "./page.module.css";
+import { useRequireAuth } from "../../../authCondition";
 import Image from "next/image";
 <Image src="/map img.jpg" alt="Weather preview" width={400} height={300} />
 
 export default function WelcomePage() {
+    useRequireAuth();
   const router = useRouter();
   const [temps, setTemps] =useState<{[key:string ]:number | string}>({});
   const cities = ["New York", "London", "Paris", "Tokyo", "Sydney", "Dubai"];
@@ -37,18 +39,6 @@ export default function WelcomePage() {
     async function fetchWeather(){
      const apiKey = process.env.NEXT_PUBLIC_WEATHER_API_KEY;
       const newTemps: { [key: string]: number | string } = {};
-      
-      // for (const city of cities) {
-      //   try {
-      //     const res = await fetch(
-      //       `https://api.openweathermap.org/data/2.5/weather?q=${city}&units=metric&appid=${apiKey}`
-      //     );
-      //     const data = await res.json();
-      //     newTemps[city] = Math.round(data.main.temp);
-      //   } catch (err) {
-      //     console.error("error fetching the weather:", city, err);
-      //   }
-      // }
       for (const city of cities) {
   try {
     const res = await fetch(
@@ -60,11 +50,11 @@ export default function WelcomePage() {
       newTemps[city] = Math.round(data.main.temp);
     } else {
       console.error("Weather fetch failed for", city, data);
-      newTemps[city] = "Error"; // optional fallback
+      newTemps[city] = "Error"; 
     }
   } catch (err) {
     console.error("error fetching the weather:", city, err);
-    newTemps[city] = "Error"; // optional fallback
+    newTemps[city] = "Error"; 
   }
 }
 
@@ -79,11 +69,6 @@ return (
    <div className="page-container">
      <Header/>    
       <main className="page-main">
-        {/* <div className="overlay">
-          <p>Click here to go to home page.</p>
-          <button onClick={() => router.push("/auth/home")}>Go to Home</button>
-        </div> */}
-
         <div className={PageStyles.weatherLayout}>
           <div className={PageStyles.leftPanel}>
             <div className={PageStyles.weatherPreview}>

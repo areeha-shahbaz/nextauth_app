@@ -2,6 +2,7 @@
 import React, { useEffect, useState } from "react";
 import Adminstyles from "./page.module.css";
 import Header from "../../components/header";
+import { useRequireAuth } from "../../../authCondition";
 
 
 interface User {
@@ -183,6 +184,7 @@ function DeleteConfirm({
 
 
 export default function AdminPage() {
+  useRequireAuth();
   const [showForm, setShowForm] = useState(false);
   const [users, setUsers] = useState<User[]>([]);
   const [loading, setLoading] = useState(true);
