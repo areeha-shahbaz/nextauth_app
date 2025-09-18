@@ -182,6 +182,47 @@ const deleteHistory = async (historyId: string) => {
     console.error("Error deleting history:", err);
   }
 };
+
+const handleHistoryClick= async ( from: string, to: string )=>{
+ setFromPlace(from);
+ setToPlace(to);
+
+if(!map){
+   console.log ("map not found")
+  return;
+}
+ const fromCoords = await geocode(from);
+    const toCoords = await geocode(to);
+if(!fromCoords || !toCoords)
+return alert(" could not find coordinates");
+
+    setPlacesList([from, to]);
+if(control){
+  map?.removeControl(control);
+}
+const routingControl = L.Routing.control({
+   waypoints: [
+        L.latLng(fromCoords[0], fromCoords[1]),
+        L.latLng(toCoords[0], toCoords[1]),
+      ],
+      lineOptions: {
+        styles: [{ color: "red", opacity: 0.8, weight: 5 }],
+      },
+
+      routeWhileDragging: false,
+      createMarker: (i:any, waypoint: any) => {
+    return L.marker(waypoint.latLng, { icon: customIcon });
+  },
+    }).addTo(map);
+
+
+    setControl(routingControl);
+
+    map.fitBounds(L.latLngBounds([
+      [fromCoords[0], fromCoords[1]],
+      [toCoords[0], toCoords[1]],
+    ]));
+}
   const handleSelectSuggestion=(name:string)=>{
     if(activeInput==="from") setFromPlace(name);
     if(activeInput==="to") setToPlace(name);
@@ -204,7 +245,9 @@ const deleteHistory = async (historyId: string) => {
         border: "1px solid #ddd",
         marginBottom: "6px",
         borderRadius: "6px",
+        cursor: "pointer",
       }}
+      onClick ={(e) => handleHistoryClick(item.from, item.to)}
     >
       {item.from} → {item.to}
       <button
@@ -218,7 +261,10 @@ const deleteHistory = async (historyId: string) => {
           fontSize: "10px",
           cursor: "pointer",
         }}
-        onClick={() => deleteHistory(item.id)}>
+        onClick={(e) =>{
+        e.stopPropagation();
+        deleteHistory(item.id);
+        }}>
         ❌
       </button>
     </li>
