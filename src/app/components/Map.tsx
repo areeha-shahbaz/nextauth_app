@@ -148,12 +148,7 @@ useEffect(() => {
       [fromCoords[0], fromCoords[1]],
       [toCoords[0], toCoords[1]],
     ]));
-// setHistory((prev) => [...prev, { from: fromPlace, to: toPlace }]);
-      // await fetch("/api/history", {
-      //   method: "POST",
-      //   headers: { "Content-Type": "application/json" },
-      //   body: JSON.stringify({ userId: user.id  || user.id, from: fromPlace, to: toPlace }),
-      // });
+
  const res = await fetch("/api/history", {
   method: "POST",
   headers: { "Content-Type": "application/json" },
