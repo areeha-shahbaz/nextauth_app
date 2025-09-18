@@ -7,12 +7,13 @@
 // }
 "use client";
 import dynamic from "next/dynamic";
-
+import { useRequireAuth } from "../../../authCondition";
 const WeatherMap = dynamic(() => import("src/app/components/WeatherMap"), {
   ssr: false, 
 });
 
 export default function WeatherPage() {
+    useRequireAuth();
   return <WeatherMap />;
 }
 

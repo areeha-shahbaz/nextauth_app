@@ -38,7 +38,7 @@ useEffect(()=>{
         <button className={styles.navBtn} onClick={() => router.push("/auth/image")}>
         Image Analyzer
       </button>
-      <button className={styles.navBtn} onClick={() => router.push("/weather")}>
+      <button className={styles.navBtn} onClick={() => router.push("/auth/weather")}>
         Weather Map
       </button>
       {role === "admin" && (
