@@ -32,7 +32,7 @@ useEffect(()=>{
     <header className={styles.header}>
       <div className={styles.logo}>LOGO</div>
       <nav className={styles.nav}>
-        <button className={styles.navBtn} onClick={()=> router.push("/map")}>
+        <button className={styles.navBtn} onClick={()=> router.push("/auth/map")}>
           Map
         </button>
         <button className={styles.navBtn} onClick={() => router.push("/image")}>
