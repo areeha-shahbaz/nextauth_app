@@ -10,7 +10,7 @@ interface TinyMCEProps {
 export default function TinyMCEEditor({ content, setContent }: TinyMCEProps) {
   return (
     <Editor
-      apiKey="svi5y888bj4f608asqdioobjk9gq4p3rp3k84cy34qxjbs7q"
+      apiKey={process.env.NEXT_PUBLIC_TINYMCE_API_KEY}
       value={content}
       init={{
         height: 500,
