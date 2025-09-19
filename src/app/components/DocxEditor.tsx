@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react";
 import mammoth from "mammoth";
-import { Document, Packer, Paragraph } from "docx";
+import { Document, Packer, Paragraph, TextRun} from "docx";
 import { saveAs } from "file-saver";
 import TinyMCEEditor from "./TinyMCEEditor";
 import styles from "./PdfFile.module.css";
@@ -38,8 +38,20 @@ export default function DocxEditor() {
 const rebuildDocx = async () => {
   const parser = new DOMParser();
   const docHtml = parser.parseFromString(content, "text/html");
-  const paragraphs = Array.from(docHtml.body.childNodes).map((node) => {
-    return new Paragraph(node.textContent || "");
+  const paragraphs: Paragraph[] = Array.from(docHtml.body.childNodes).map((node) => {
+    const children: TextRun[] = [];
+
+    node.childNodes.forEach((child) => {
+      if (child.nodeName === "STRONG") {
+        children.push(new TextRun({ text: child.textContent || "", bold: true }));
+      } else if (child.nodeName === "EM") {
+        children.push(new TextRun({ text: child.textContent || "", italics: true }));
+      } else {
+        children.push(new TextRun({ text: child.textContent || "" }));
+      }
+    });
+
+    return new Paragraph({ children });
   });
 
   const doc = new Document({ sections: [{ children: paragraphs }] });
