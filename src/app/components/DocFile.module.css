@@ -1,14 +1,15 @@
 .sides{
     display:flex;
     flex-direction:row;
-    margin-top:100px;
+    margin-top:80px;
     gap:20px;
     
 }.subContainer {
   display: flex;
   flex-direction: column;
-  gap: 15px;
-  margin-bottom: 30px;
+  gap: 5px;
+  margin:5px;
+  margin-bottom: 20px;
   background-color: #f5f8fa; 
   border-radius: 10px;
   height:fit-content;
@@ -26,22 +27,21 @@
 }
 
 .btn {
-  padding: 10px 20px;
-  background-color: #264da0; 
+  padding: 10px 10px;
+  background-color: #497be6c9; 
   color: #000000;
   border: none;
   border-radius: 8px;
   cursor: pointer;
   font-size: 0.95rem;
-  font-weight: 500;
   transition: background-color 0.3s ease, transform 0.2s ease;
   margin: 5px;
-  margin-right:10px;
-  margin-bottom:10px;
+  margin-left:20px;
+  margin-right:20px;
 }
 
 .btn:hover {
-  background-color: #1d4ed8; 
+  background-color: #3568f7; 
   transform: translateY(-2px);
 }
 
@@ -52,6 +52,7 @@
 }
 
 .preview {
+  width:900px;
     flex:1;
     flex-direction: column;
   padding: 15px;
@@ -72,7 +73,11 @@
   border-radius: 8px;
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
 }
-
+.addfile{
+margin-left:10px;
+  align-items: center;
+  justify-content: center;
+}
 .fileinput {
   padding: 6px;
   border-radius: 6px;
