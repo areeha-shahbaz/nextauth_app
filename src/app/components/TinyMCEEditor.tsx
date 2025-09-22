@@ -116,12 +116,12 @@ const handleAIRequest = async (editor: any, promptText: string) => {
               onAction: () => pdfRef.current?.(),
             });
 
-            editor.ui.registry.addIcon(
-              "aiSearchIcon",
-              `<svg width="24" height="24" viewBox="0 0 24 24">
-                <path d="M21.71 20.29l-3.388-3.388A8.962 8.962 0 0 0 19 11a9 9 0 1 0-9 9 8.962 8.962 0 0 0 5.902-2.678l3.388 3.388a1 1 0 0 0 1.414-1.414zM4 11a7 7 0 1 1 14 0 7 7 0 0 1-14 0z"/>
-              </svg>`
-            );
+            // editor.ui.registry.addIcon(
+            //   "aiSearchIcon",
+            //   `<svg width="24" height="24" viewBox="0 0 24 24">
+            //     <path d="M21.71 20.29l-3.388-3.388A8.962 8.962 0 0 0 19 11a9 9 0 1 0-9 9 8.962 8.962 0 0 0 5.902-2.678l3.388 3.388a1 1 0 0 0 1.414-1.414zM4 11a7 7 0 1 1 14 0 7 7 0 0 1-14 0z"/>
+            //   </svg>`
+            // );
 
             const openAIDialog = (prefill: string = "") => {
               editor.windowManager.open({
@@ -148,13 +148,15 @@ const handleAIRequest = async (editor: any, promptText: string) => {
               position: "selection",
               scope: "node",
             });
-            editor.ui.registry.addButton("aiSearch", {
-              icon: "aiSearchIcon",
-              tooltip: "Search with AI",
-              onAction: () => openAIDialog(""),
+            editor.ui.registry.addButton("aiSearch", {  
+                    text: "✨Search with AI",
+                    onAction: () => openAIDialog(""),
+                    tooltip: "Search with AI",                 
+  onPostRender: (btnApi: any) => btnApi.getEl().classList.add("my-ai-button"),
             });
-          },
-        }}
+  },
+}}
+         
         onEditorChange={(html) => setContent(html)}
       />
     </>

@@ -173,6 +173,19 @@ body {
 .page-main button:hover {
   background: #242675;
 }
+.my-ai-button.tox-tbtn {
+  background-color: #4f46e5 !important;
+  color: white !important;
+  border-radius: 8px !important;
+  padding: 4px 12px !important;
+  font-weight: bold !important;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.2) !important;
+}
+
+.my-ai-button.tox-tbtn:hover {
+  background-color: #4338ca !important;
+}
+
 /* 
 .leaflet-routing-container {
   position: absolute !important;
