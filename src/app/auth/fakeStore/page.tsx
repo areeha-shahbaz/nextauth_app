@@ -1,7 +1,6 @@
 "use client";
 import {useState, useEffect} from "react";
 import Header from "../../components/header";  
-import axios from "axios";
 import InfiniteScroll from "react-infinite-scroll-component";
 import styles from "./store.module.css";
 type Product = {
@@ -13,7 +12,7 @@ type Product = {
 const ProductPage =()=>{
     const[product,setProduct] =  useState<Product[]>([]);
     const [visibleProducts, setVisibleProducts]= useState<Product[]>([]);
-    const [itemsPerPage]=useState(5);
+    const [itemsPerPage]=useState(10);
     const [loading, setLoading]=useState(true);
  const fetchMoreData = () => {
     if(visibleProducts.length >= product.length){
@@ -27,15 +26,27 @@ const ProductPage =()=>{
 
   };
 useEffect(()=>{
-    setLoading(true);
-  axios.get<Product[]>("https://fakestoreapi.com/products")
+  const loadingProducts= async () =>{
+   try{
+        setLoading(true);
+  const res= await fetch("https://fakestoreapi.com/products")
+const data:Product[]= await res.json();
+  setProduct(data);
+    setVisibleProducts(data.slice(0,itemsPerPage));
 
-  .then((res) =>{ setProduct(res.data);
-    setVisibleProducts(res.data.slice(0,itemsPerPage));
-})
-      .catch((err) => console.error(err))
-      .finally(()=>setLoading(false));
+   }
+   catch(err) {console.error(err);
+
+   }
+finally{
+    setLoading(false);
+
+}
+  };
+loadingProducts();
   }, [itemsPerPage]);
+
+
 return (
     <div className={styles.divbody}>
     <div className={styles.pagecontainer}>
@@ -83,4 +94,5 @@ loader={
     </div>
 );
 };
+
 export default ProductPage;
