@@ -75,10 +75,9 @@ const {cart, clearCart}= useCart();
       });
       if (paymentResult.error) {
         alert(paymentResult.error.message);
-      } else if (paymentResult.paymentIntent?.status === "succeeded") {
-        clearCart(); 
-        router.push("/success");
-      }
+      } if (paymentResult.paymentIntent?.status === "succeeded") {
+  router.push("/success");
+}
     } catch (err) {
       console.error("Payment error:", err);
     } finally {
@@ -96,12 +95,7 @@ const {cart, clearCart}= useCart();
   );
 }
 export default function CartPage() {
-  const { cart, removeFromCart, clearCart, loading } = useCart(); 
-  if (loading) {
-    return (
-        <h2>Loading your cart...</h2>
-    );
-  }
+  const { cart, removeFromCart, clearCart,  } = useCart(); 
   if (cart.length === 0) {
     return (
       <div className={styles.pg}>
