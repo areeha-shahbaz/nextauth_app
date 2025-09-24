@@ -3,11 +3,12 @@ import {useState, useEffect} from "react";
 import Header from "../../components/header";  
 import InfiniteScroll from "react-infinite-scroll-component";
 import styles from "./store.module.css";
-
+import {useCart} from "src/app/context/CartContext";
 
 
 type Product = {
     id:number,
+    quantity:number;
     image:string,
     title:string,
     price:number,
@@ -21,14 +22,12 @@ const ProductPage = () => {
   const [itemsPerPage] = useState(10);
   const [loading, setLoading] = useState(true);
   const [addedItems, setAddedItems] = useState<number[]>([]);
+const {cart, addToCart}=useCart();
 
   useEffect(() => {
-    const savedCart = localStorage.getItem("cart");
-    if (savedCart) {
-      const cartItems: CartItem[] = JSON.parse(savedCart);
-      setAddedItems(cartItems.map((item) => item.id));
+      setAddedItems(cart.map((item) => item.id));
     }
-  }, []);
+  , [cart]);
 
   const fetchMoreData = () => {
     const next = visibleProducts.length + itemsPerPage;
@@ -37,21 +36,7 @@ const ProductPage = () => {
 
   const handleAddToCart = (product: Product) => {
     const item: CartItem = { ...product, quantity: 1 };
-const savedCart= localStorage.getItem("cart");
-const cart: CartItem[]= savedCart? JSON.parse(savedCart):[];
-    const existing = cart.find((i) => i.id === item.id);
-    let updatedCart;
-    if (existing) {
-      updatedCart = cart.map((i) =>
-        i.id === item.id ? { ...i, quantity: i.quantity + 1 } : i
-      );
-    } else {
-      updatedCart = [...cart, item];
-    }
-
-    // Save back to localStorage
-    localStorage.setItem("cart", JSON.stringify(updatedCart));
-    setAddedItems((prev) => [...prev, item.id]);
+    addToCart(item);
   };
 
   useEffect(() => {
@@ -112,6 +97,7 @@ const cart: CartItem[]= savedCart? JSON.parse(savedCart):[];
                         disabled={addedItems.includes(p.id)}
                       >
                         {addedItems.includes(p.id) ? "Added" : "Add to Cart"}
+                        
                       </button>
                     </div>
                   </div>

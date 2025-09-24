@@ -3,7 +3,6 @@ import { NextRequest, NextResponse } from "next/server";
 import fs from "fs";
 import path from "path";
 import connect from "src/dbConnection/dbConnection";
-import mongoose from "mongoose";
 import docxModel from "src/models/docxModel";
 export const runtime = "nodejs";
 

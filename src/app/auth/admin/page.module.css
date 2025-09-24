@@ -22,9 +22,10 @@
   background: #fff;
   padding: 2rem;
   border-radius: 12px;
-  width: 400px;
-  max-width: 90%;
+ width:600px;
+  max-width: 100%;
   position: relative;
+ overflow-x:visible;
 }
 
 .closeButton {

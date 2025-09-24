@@ -7,6 +7,7 @@ import { useEffect } from "react";
 import { login } from "src/store/authSlice";
 import { Elements } from "@stripe/react-stripe-js";
 import { loadStripe } from "@stripe/stripe-js";
+import { CartProvider } from "./context/CartContext";
 
 const stripePromise = loadStripe(
   process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY!
@@ -36,7 +37,9 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       <body>
         <Provider store={store}>
           <HydrateAuth>
+            <CartProvider>
             <Elements stripe={stripePromise}>{children}</Elements>
+            </CartProvider>
           </HydrateAuth>
         </Provider>
       </body>

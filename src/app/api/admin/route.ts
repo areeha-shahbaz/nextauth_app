@@ -3,6 +3,7 @@ import connect from "src/dbConnection/dbConnection";
 import jwt from "jsonwebtoken";
 import crypto from "crypto";
 import User from "src/models/userModel";
+import Order from "src/models/orderModel";
 import { sendEmail } from "src/helpers/mailer";
 export const runtime = "nodejs";
 
@@ -48,6 +49,7 @@ export async function GET(req:NextRequest){
   return NextResponse.json({ success: false, error: message }, { status: 403 });
 }
     }
+ 
  export async function POST(req: NextRequest) {
   try {
     await connect();
@@ -102,85 +104,6 @@ const newUser = await User.create({
 }
 
 
-//      export async function POST(req: NextRequest) {
-//   try {
-//     await connect();
-//     await authorizeAdmin(req);
-
-//     const { name, email, password, role, status } = await req.json();
-//     if (!name || !email || !password || !role || !status) {
-//       return NextResponse.json(
-//         { success: false, error: "All fields are required" },
-//         { status: 400 }
-//       );
-//     }
-
-//     const existingUser = await User.findOne({ email });
-//     if (existingUser) {
-//       return NextResponse.json(
-//         { success: false, error: "User already exists" },
-//         { status: 400 }
-//       );
-//     }
-
-//     const bcryptjs = (await import("bcryptjs")).default;
-//     const passwordHash = await bcryptjs.hash(password, 10);
-
-//     const newUser = await User.create({
-//       uuid: crypto.randomUUID(),
-//       name,
-//       email,
-//       role,
-//       status,
-//       passwordHash,
-//       mustChangePassword: true, 
-//     });
-
-//     await sendEmail({
-//       email,
-//       emailType: "ADMIN_CREATE",
-//       userId: newUser._id.toString(),
-//       tempPassword: password,
-//     });
-
-//     return NextResponse.json({
-//       success: true,
-//       message: "User created & email sent",
-//     });
-//   } catch (err: any) {
-//     return NextResponse.json(
-//       { success: false, error: err.message },
-//       { status: 500 }
-//     );
-//   }
-// }
-// export async function POST(req:NextRequest){
-//     try{
-//         await connect();
-//         await authorizeAdmin(req);
-    
-//     const {name, email, password, role, status}= await req.json();
-//      if(!name || !email || !password || !role || !status){
-//      return NextResponse.json({success:false, error:"All fields are required"},
-//         {status:400});
-//      }
-//      const existingUser =await User.findOne({email});
-//      if(existingUser){
-//         return NextResponse.json({success:false,error:"user already exists"},{
-//             status:400
-//         });
-//      }
-//      const bcryptjs = (await import("bcryptjs")).default;
-//      const passwordHash= await bcryptjs.hash(password,10);
-//      const newUser= new User({name, email, role, status,passwordHash,uuid:crypto.randomUUID()});
-//      await newUser.save();
-//      return NextResponse.json({success:true, message:"User created successfully"});
-//     }
-//      catch (err: any) {
-//     return NextResponse.json({ success: false, error: err.message }, { status: 403 });
-  
-// }
-// }
 
 export async function PUT(req: NextRequest) {
   try {

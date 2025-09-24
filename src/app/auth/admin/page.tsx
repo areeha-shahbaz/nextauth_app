@@ -19,6 +19,24 @@ interface ModalProps {
   children: React.ReactNode;
 }
 
+interface Order{
+  id:string;
+  user:{
+    id:string;
+    name:string;
+    email:string;
+
+  };
+  items:{
+    id:number;
+    title:string;
+    price:number;
+    quantity:number;
+  }[];
+  amount :number;
+  status:string;
+  createdAt:string;
+}
 function Modal({isOpen, onClose, children}:ModalProps){
   if(!isOpen)return null;
   return(
@@ -63,16 +81,6 @@ function AddUserForm({
           onChange={(e) => setFormData({ ...formData, email: e.target.value })}
           required
         />
-        {/* <input
-          type="password"
-          placeholder="Password"
-          className={Adminstyles.input}
-          value={formData.password}
-          onChange={(e) =>
-            setFormData({ ...formData, password: e.target.value })
-          }
-          required
-        /> */}
         <select
           className={Adminstyles.input}
           value={formData.role}
@@ -342,8 +350,82 @@ async function handleDelete(id: string) {
     setActionLoading(false); 
   }
 }
+const [selectedUser, setSelectedUser] = useState<User | null>(null);
+const [orders, setOrders] = useState<Order[]>([]);
+const [ordersLoading, setOrdersLoading] = useState(false);
+const [showOrderModal, setOrderModal]=useState(false);
 
+// async function fetchOrders(userId: string, email:string,name:string  ) {
+//   try {
+//     setOrdersLoading(true);
+//     setSelectedUser({id:userId,name,email});
 
+//     const token = localStorage.getItem("token");
+//     const res = await fetch(`/api/orders?userId=${userId}`, {
+//       headers: { Authorization: `Bearer ${token}` },
+//     });
+
+//     const data = await res.json();
+//     if (data.success) {
+//       const mappedOrders = data.orders.map((order: any) => ({
+//         id: order._id,
+//         user: {
+//           id: order.user._id,
+//           name: order.user.name,
+//           email: order.user.email,
+//         },
+//         items: order.items,
+//         amount: order.amount,
+//         status: order.status || "pending",
+//         createdAt: new Date(order.createdAt).toLocaleString(),
+//       }));
+//       setOrders(mappedOrders);
+//     } else {
+//       setOrders([]);
+//     }
+//   } catch {
+//     setOrders([]);
+//   } finally {
+//     setOrdersLoading(false);
+//   }
+// }    
+
+async function fetchOrders(userId: string, name: string, email: string) {
+  try {
+    setOrdersLoading(true);
+    setSelectedUser({id: userId, name, email, role:"",status:""});
+
+    const token = localStorage.getItem("token");
+    const res = await fetch(`/api/orders?userId=${userId}`, {
+      headers: { Authorization: `Bearer ${token}` },
+    });
+
+    const data = await res.json();
+    if (data.success) {
+      const mappedOrders = data.orders.map((order: any) => ({
+        id: order._id,
+        user: {
+          id: order.user._id,
+          name: order.user.name,
+          email: order.user.email,
+        },
+        items: order.items,
+        amount: order.amount,
+        status: order.status || "pending",
+        createdAt: new Date(order.createdAt).toLocaleString(),
+      }));
+      setOrders(mappedOrders);
+    } else {
+      setOrders([]);
+    }
+    setOrderModal(true); 
+  } catch {
+    setOrders([]);
+    setOrderModal(true);
+  } finally {
+    setOrdersLoading(false);
+  }
+}
 
   function handleEdit(user: User) {
     setEditingUserId(user.id);
@@ -421,6 +503,7 @@ async function handleDelete(id: string) {
             
           />
         </Modal>
+        
 
         {loading ? (
           <p>Loading users...</p>
@@ -450,6 +533,14 @@ async function handleDelete(id: string) {
                   <td>{u.role}</td>
                   <td>{u.status}</td>
                   <td>
+                  <button 
+                  onClick={() => fetchOrders(u.id, u.name, u.email)
+                  }
+                  className={`${Adminstyles.actionButton}`}
+                >
+                  View Orders
+                </button>
+
                     <button
                       onClick={() => handleEdit(u)}
                       className={`${Adminstyles.actionButton} ${Adminstyles.edit}`}
@@ -474,6 +565,43 @@ async function handleDelete(id: string) {
             </tbody>
           </table>
         )}
+        <Modal isOpen={showOrderModal} onClose={()=>setOrderModal(false)}>
+        {selectedUser && (
+          <div >
+            <h2 >Order history</h2>
+            {ordersLoading?(
+              <p>Loading Orders...</p>
+            ):orders.length===0?(
+              <p>No Orders found for this user</p>):
+              (<table className={Adminstyles.table}>
+              <thead>
+                <tr>
+                   <th>Items</th>
+                 <th>Amount</th>
+                  <th>Status</th>
+                   <th>Created</th>
+                </tr>
+              </thead>
+              <tbody>{orders.map((order) =>(
+                <tr key={order.id}>
+                  <td>
+                    {order.items.map((i:any,idx:number)=>(
+                      <div key={idx}>
+                   {i.title} x {i.quantity} (${i.price});
+                      </div>
+                    ))}
+                  </td>
+                  <td>${order.amount}</td>
+                  <td>${order.status}</td>
+                  <td>{order.createdAt}</td>
+
+                </tr>))}
+                </tbody>
+              </table>
+            )}
+            </div>
+            )}
+</Modal>
       </div>
     </div>
   );

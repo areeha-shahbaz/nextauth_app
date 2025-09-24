@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import { loadStripe } from "@stripe/stripe-js";
 import { useRouter } from "next/navigation";
+import {useCart} from "src/app/context/CartContext";
 import {
   Elements,
   CardElement,
@@ -18,23 +19,26 @@ type CartItem = {
   title: string;
   price: number;
   quantity: number;
+  
 };
 
-const stripePromise = loadStripe(process.env.NEXT_PUBLIC_PUBLISHABLE_KEY!);
+  const stripePromise = loadStripe(process.env.NEXT_PUBLIC_PUBLISHABLE_KEY!);
 
-function CheckoutForm({
-  cartItems,
-  clearCart,
-}: {
-  cartItems: CartItem[];
-  clearCart: () => void;
-}) {
+function CheckoutForm(){
+const {cart, clearCart}= useCart();
   const stripe = useStripe();
   const elements = useElements();
   const [loading, setLoading] = useState(false);
-  const router = useRouter();
+ const [userId, setUserId] = useState<string | null>(null);
+  useEffect(() => {
+    const storedUser = localStorage.getItem("user");
+    if (!storedUser) return;
+    const parsedUser = JSON.parse(storedUser);
+    setUserId(parsedUser._id || parsedUser.id);
+  }, []); 
 
-  const totalPrice = cartItems.reduce(
+  const router = useRouter();
+    const totalPrice = cart.reduce(
     (total, item) => total + item.price * item.quantity,
     0
   );
@@ -44,11 +48,22 @@ function CheckoutForm({
     if (!stripe || !elements) return;
     setLoading(true);
 
+  if (!userId) {
+  return new Response(
+    
+    JSON.stringify({ error: "User ID missing" }),
+    { status: 400, headers: { "Content-Type": "application/json" } }
+  );
+}
+
     try {
       const res = await fetch("/api/create-payment-intent", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ amount: Math.round(totalPrice * 100) }),
+        body: JSON.stringify({ amount: Math.round(totalPrice * 100) ,
+          cartItem:cart,
+          userId,
+        }),
       });
 
       const data = await res.json();
@@ -80,85 +95,48 @@ function CheckoutForm({
     </form>
   );
 }
-
 export default function CartPage() {
-  const [cartItems, setCartItems] = useState<CartItem[]>([]);
+  const { cart, removeFromCart, clearCart } = useCart(); 
 
-  useEffect(() => {
-    const savedCart = localStorage.getItem("cart");
-    if (savedCart) setCartItems(JSON.parse(savedCart));
-  }, []);
-
-  useEffect(() => {
-    localStorage.setItem("cart", JSON.stringify(cartItems));
-  }, [cartItems]);
-
-  const removeItem = (id: number) =>
-    setCartItems(cartItems.filter((item) => item.id !== id));
-
-  const updateQuantity = (id: number, quantity: number) => {
-    if (quantity < 1) return;
-    setCartItems(
-      cartItems.map((item) =>
-        item.id === id ? { ...item, quantity } : item
-      )
-    );
-  };
-
-  const clearCart = () => {
-    setCartItems([]);
-    localStorage.removeItem("cart"); 
-  };
-
-  if (cartItems.length === 0) {
+  if (cart.length === 0) {
     return (
       <div className={styles.pg}>
-      <div className={styles.emptyCart}>
-        <h2>Your cart is empty</h2>
-        <Link href="/auth/fakeStore">Go back to store</Link>
-      </div>
+        <div className={styles.emptyCart}>
+          <h2>Your cart is empty</h2>
+          <Link href="/auth/fakeStore">Go back to store</Link>
+        </div>
       </div>
     );
   }
 
   return (
     <div className={styles.pg}>
-    <div className={styles.cartPage}>
-      <h1>Your Cart</h1>
-      <div className={styles.cartContainer}>
-        {cartItems.map((item) => (
-          <div key={item.id} className={styles.cartItem}>
-            <img
-              src={item.image}
-              alt={item.title}
-              className={styles.cartImage}
-            />
-            <div className={styles.cartInfo}>
-              <h3>{item.title}</h3>
-              <p>${item.price}</p>
-              <div className={styles.quantityControl}>
-                <button onClick={() => updateQuantity(item.id, item.quantity - 1)}>
-                  -
-                </button>
-                <span>{item.quantity}</span>
-                <button onClick={() => updateQuantity(item.id, item.quantity + 1)}>
-                  +
-                </button>
+      <div className={styles.cartPage}>
+        <h1>Your Cart</h1>
+        <div className={styles.cartContainer}>
+          {cart.map((item) => (
+            <div key={item.id} className={styles.cartItem}>
+            <img src={item.image} alt={item.title} className={styles.cartImage}/>
+              <div className={styles.cartInfo}>
+                <h3>{item.title}</h3>
+                <p>${item.price}</p>
+                <div className={styles.quantityControl}>
+                  <button
+                    onClick={() =>
+                      removeFromCart(item.id) 
+                    }
+                  >
+                    Remove
+                  </button>
+                </div>
               </div>
             </div>
-            <button
-              className={styles.removeBtn}
-              onClick={() => removeItem(item.id)}
-            >
-              Remove
-            </button>
-          </div>
-        ))}
+          ))}
+        </div>
+        <Elements stripe={stripePromise}>
+          <CheckoutForm />
+        </Elements>
       </div>
-      <Elements stripe={stripePromise}>
-        <CheckoutForm cartItems={cartItems} clearCart={clearCart} />
-      </Elements>
-    </div>
     </div>
   );
 }

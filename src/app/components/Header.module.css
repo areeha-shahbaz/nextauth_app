@@ -55,3 +55,64 @@
 .logoutBtn:hover {
   background: #dc2626;
 }
+.cartWrapper {
+  position: relative;
+  display: inline-block;
+}
+
+.cartBtn {
+  background: none;
+  border: none;
+  font-size: 1.5rem;
+  cursor: pointer;
+  position: relative;
+}
+
+.cartBadge {
+  background: red;
+  color: white;
+  font-size: 0.8rem;
+  border-radius: 50%;
+  padding: 2px 6px;
+  position: absolute;
+  top: -5px;
+  right: -10px;
+}
+
+.cartDropdown {
+  position: absolute;
+  right: 0;
+  top: 120%;
+  background: white;
+  color: rgb(39, 39, 39);
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  padding: 10px;
+  min-width: 200px;
+  box-shadow: 0px 4px 10px rgba(0,0,0,0.15);
+  z-index: 1000;
+}
+
+.cartDropdown ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.cartDropdown li {
+  padding: 5px 0;
+  gap:4px;
+  
+  border-bottom: 1px solid #eee;
+}
+
+.checkoutBtn {
+  margin-top: 10px;
+  width: 100%;
+  padding: 8px;
+  background: rgb(22, 163, 85);
+  color: white;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+}
