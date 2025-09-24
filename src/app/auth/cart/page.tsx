@@ -96,8 +96,12 @@ const {cart, clearCart}= useCart();
   );
 }
 export default function CartPage() {
-  const { cart, removeFromCart, clearCart } = useCart(); 
-
+  const { cart, removeFromCart, clearCart, loading } = useCart(); 
+  if (loading) {
+    return (
+        <h2>Loading your cart...</h2>
+    );
+  }
   if (cart.length === 0) {
     return (
       <div className={styles.pg}>
