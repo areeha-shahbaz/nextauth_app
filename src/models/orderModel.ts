@@ -12,7 +12,9 @@ const OrderSchema = new Schema(
       ],
      amount: {type:Number, required:true},
      paymentIntentId:{type:String,required:true},
-    status:{type:String,default:"pending"},
+    status:{type:String,
+    enum: ["pending", "paid"],
+    default:"pending"},
     },
     {timestamps:true}
 );

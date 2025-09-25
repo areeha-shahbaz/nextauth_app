@@ -58,7 +58,7 @@ useEffect(()=>{
       {role === "admin" && (
                 <button
                   className={styles.navBtn}
-                  onClick={() => router.push("/auth/admin")}
+                  onClick={() => router.push("/auth/tabs")}
                 >
                   Admin Panel
                 </button>

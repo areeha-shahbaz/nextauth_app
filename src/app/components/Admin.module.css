@@ -19,11 +19,13 @@
 }
 
 .modalContent {
+  position:relative;
   background: #fff;
   padding: 2rem;
   border-radius: 12px;
  width:600px;
   max-width: 100%;
+  max-height:90%;
   position: relative;
  overflow-x:visible;
 }

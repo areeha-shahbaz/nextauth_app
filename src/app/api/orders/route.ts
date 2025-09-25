@@ -55,4 +55,40 @@ export async function GET(req: NextRequest) {
       { status: 500 }
     );
   }
+ }
+ 
+export async function PATCH(req:NextRequest){
+  try{
+    await connect();
+    await authorizeAdmin(req);
+    const {id, status}= await req.json();
+    if(!id || !status){
+      return NextResponse.json(
+        {
+          success:false, error:"Order ID and Status are required"
+        },{status:400}
+      );
+    }
+    const updated = await Order.findByIdAndUpdate(
+    id,{status},{new:true}
+    ).populate("user","name email");
+    
+    console.log("Updated order:", updated);
+
+    if(!updated){
+      return NextResponse.json(
+        {success:false, error:"order not found"},
+        {status:400}
+      );
+    }
+    return NextResponse.json({success:true, order:updated});
+  }catch(err:any){
+    return NextResponse.json(
+      {success:false, error: err.message || "failed to update the order history"},
+      {status:500}
+    );
+
+  }
 }
+
+

@@ -43,7 +43,7 @@ const {cart, addToCart}=useCart();
     const loadProducts = async () => {
       try {
         setLoading(true);
-        const res = await fetch("https://fakestoreapi.com/products");
+        const res = await fetch("/api/products");
         const data: Product[] = await res.json();
         setProduct(data);
         setVisibleProducts(data.slice(0, itemsPerPage));

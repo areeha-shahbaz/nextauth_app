@@ -9,8 +9,10 @@
     "lint": "eslint"
   },
   "dependencies": {
+    "@emotion/react": "^11.14.0",
+    "@emotion/styled": "^11.14.1",
     "@mui/icons-material": "^7.3.1",
-    "@mui/material": "^7.3.1",
+    "@mui/material": "^7.3.2",
     "@react-google-maps/api": "^2.20.7",
     "@reduxjs/toolkit": "^2.9.0",
     "@stripe/react-stripe-js": "^4.0.2",
@@ -42,6 +44,7 @@
     "react-infinite-scroll-component": "^6.1.0",
     "react-leaflet": "^5.0.0",
     "react-redux": "^9.2.0",
+    "react-tabs": "^6.1.0",
     "stripe": "^18.5.0",
     "uuid": "^11.1.0"
   },
