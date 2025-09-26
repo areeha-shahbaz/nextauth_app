@@ -27,7 +27,8 @@ useEffect(() => {
       setProducts(data);
     } catch (err) {
       console.error(err);
-    } finally {
+    }
+     finally {
       setLoading(false);
     }
   };
@@ -61,10 +62,13 @@ const handleAddProduct = async () => {
   if (loading) return <h2>Loading products...</h2>;
 
   return (
-    <div>
+    <div style={{minHeight: "100vh" , padding:"0px",margin:"0px", }}>
       {/* <Header /> */}
-      <div style={{backgroundColor:"white", padding:"8px", marginTop:"8%",borderRadius:"14px"}}>
-    <h2 style={{paddingTop:"14px",}}>Add New Product</h2>
+     
+
+      <div style={{backgroundColor:"white", padding:"15px", marginTop:"5px",
+        marginBottom:"15px",borderRadius:"14px", boxShadow:" rgba(0, 0, 0, 0.35) 0px 5px 15px"}}>
+    <h2 style={{padding:"8px",}}>Add New Product</h2>
       <input style={{fontSize:"12px",margin:"5px",padding:"5px",gap:"4px",}}
         type="text"
         placeholder="Title"
@@ -87,13 +91,14 @@ const handleAddProduct = async () => {
     }
         }}
       />
-      <button onClick={handleAddProduct} style={{backgroundColor:"lightseagreen",fontSize:"14px", padding:" 12px 16px",fontWeight:" 600", borderRadius:" 10px",border:" none",cursor:" pointer",color:" #fff" }}>Add Product</button>
+      <button onClick={handleAddProduct} style={{backgroundColor:"lightseagreen",fontSize:"14px", padding:" 10px 12px",margin:"4px",fontWeight:" 600", borderRadius:" 10px",border:" none",cursor:" pointer",color:" #fff" }}>Add Product</button>
       
       </div>
-      <div style={{backgroundColor:"white", padding:"8px", marginTop:"10px", borderRadius:"14px"}}>
+      <div style={{backgroundColor:"white", padding:"15px",  marginTop:"10px",
+        borderRadius:"14px", listStyle:"none",boxShadow:" rgba(0, 0, 0, 0.35) 0px 5px 15px"}}>
       <h2>All Products</h2>
       
-      <ul>
+      <ul style={{ listStyle: "none", padding: 0, margin: 0 }}>
         {product.map((p) => (
           <li key={p.id}>
             <img 
@@ -101,7 +106,7 @@ const handleAddProduct = async () => {
         alt={p.title} 
         width={80} 
         height={80} 
-        style={{ objectFit: "contain" }} 
+        style={{ objectFit: "contain" , listStyleType:"none"}} 
       />
             {p.title} - ${p.price}
           </li>

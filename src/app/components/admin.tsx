@@ -37,17 +37,34 @@ interface Order{
   status:string;
   createdAt:string;
 }
-function Modal({isOpen, onClose, children}:ModalProps){
-  if(!isOpen)return null;
-  return(
-     <div className={Adminstyles.modalOverlay}>
-      <div className={Adminstyles.modalContent}>
+// function Modal({isOpen, onClose, children}:ModalProps){
+//   if(!isOpen)return null;
+//   return(
+//      <div className={Adminstyles.modalOverlay}>
+//       <div className={Adminstyles.modalContent}>
+//         <button className={Adminstyles.closeButton} onClick={onClose}>✖</button>
+//         {children}
+//       </div>
+//      </div>
+//   );
+// }
+function Modal({ isOpen, onClose, children }: ModalProps) {
+  return (
+    <div
+      className={`${Adminstyles.modalOverlay} ${isOpen ? Adminstyles.active : ""}`}
+      onClick={onClose} 
+    >
+      <div
+        className={Adminstyles.modalContent}
+        onClick={(e) => e.stopPropagation()} 
+      >
         <button className={Adminstyles.closeButton} onClick={onClose}>✖</button>
         {children}
       </div>
-     </div>
+    </div>
   );
 }
+
 function AddUserForm({
   formData,
   setFormData,
