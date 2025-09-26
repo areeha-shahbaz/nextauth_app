@@ -25,14 +25,14 @@ export default function Admin() {
   return (
  
 
-    <Box sx={{ minHeight: "100vh", display: "flex", padding:"0px",
+    <Box sx={{ minHeight: "100vh",width:"100vw", display: "flex", padding:"0px",
         margin:"0px"
      }}>
       <Header />
   <Box
         sx={{
-    width: "100%",
-    maxWidth: 1200,
+    width: "100vw",
+    maxWidth: "100vw",
     minHeight: "60vh",
     height:"100%",
     mx: "auto",

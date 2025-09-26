@@ -37,17 +37,6 @@ interface Order{
   status:string;
   createdAt:string;
 }
-// function Modal({isOpen, onClose, children}:ModalProps){
-//   if(!isOpen)return null;
-//   return(
-//      <div className={Adminstyles.modalOverlay}>
-//       <div className={Adminstyles.modalContent}>
-//         <button className={Adminstyles.closeButton} onClick={onClose}>✖</button>
-//         {children}
-//       </div>
-//      </div>
-//   );
-// }
 function Modal({ isOpen, onClose, children }: ModalProps) {
   return (
     <div
@@ -603,7 +592,7 @@ async function handleUpdateOrderStatus(orderId: string, newStatus: string) {
                     <td>${order.amount}</td>
                     <td>
                       {order.status}
-                      {order.status !== "pending" && (
+                      {order.status === "pending" && (
                         <button
                           className={Adminstyles.actionButton}
                           onClick={() => handleUpdateOrderStatus(order.id, "paid")}>

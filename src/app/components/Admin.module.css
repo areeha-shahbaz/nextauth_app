@@ -32,11 +32,12 @@
   background: #fff;
   padding: 2rem;
   border-radius: 12px;
+  margin-top: 55px;
+
   width: 600px;
   max-width: 100%;
   max-height: 90%;
-  overflow-x: visible;
-
+  overflow-x: scroll;
   transform: scale(0.8);
   opacity: 0;
   transition: transform 0.4s ease 0.2s, opacity 0.4s ease 0.2s;
@@ -47,29 +48,6 @@
   transform: scale(1);
   opacity: 1;
 }
-/* 
-.modalOverlay {
-  position: fixed;
-  inset: 0;
-  background: rgba(0,0,0,0.6);
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  z-index: 50;
-}
-
-.modalContent {
-  position:relative;
-  background: #fff;
-  padding: 2rem;
-  border-radius: 12px;
- width:600px;
-  max-width: 100%;
-  max-height:90%;
-  position: relative;
- overflow-x:visible;
-} */
-
 .closeButton {
   position: absolute;
   top: 8px;
@@ -153,7 +131,8 @@
   background-color: #fff;
   border-radius: 12px;
   overflow: hidden;
-  box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+  box-shadow: rgba(14, 30, 37, 0.12) 0px 2px 4px 0px, rgba(14, 30, 37, 0.32) 0px 2px 16px 0px;
+
 }
 
 .table th,
