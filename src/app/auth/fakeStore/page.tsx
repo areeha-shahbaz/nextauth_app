@@ -1,27 +1,18 @@
 "use client";
-import {useState, useEffect} from "react";
+import { useState, useEffect } from "react";
 import Header from "../../components/header";  
 import InfiniteScroll from "react-infinite-scroll-component";
 import styles from "./store.module.css";
-import {useCart} from "src/app/context/CartContext";
-
-
-type Product = {
-    id:number,
-    quantity:number;
-    image:string,
-    title:string,
-    price:number,
-}
-
-type CartItem = Product & { quantity: number };
+import Link from "next/link";
+import { useCart } from "src/app/context/CartContext";
+import { Product, CartItem } from "src/types/products";  
 
 const ProductPage = () => {
   const [product, setProduct] = useState<Product[]>([]);
   const [visibleProducts, setVisibleProducts] = useState<Product[]>([]);
   const [itemsPerPage] = useState(10);
   const [loading, setLoading] = useState(true);
-  const [addedItems, setAddedItems] = useState<number[]>([]);
+  const [addedItems, setAddedItems] = useState<string[]>([]);
 const {cart, addToCart}=useCart();
 
   useEffect(() => {
@@ -34,10 +25,11 @@ const {cart, addToCart}=useCart();
     setVisibleProducts(product.slice(0, next));
   };
 
-  const handleAddToCart = (product: Product) => {
-    const item: CartItem = { ...product, quantity: 1 };
-    addToCart(item);
-  };
+ const handleAddToCart = (product: Product) => {
+  const item: CartItem = { ...product, quantity: 1 };
+  addToCart(item);
+};
+
 
   useEffect(() => {
     const loadProducts = async () => {
@@ -83,14 +75,17 @@ const {cart, addToCart}=useCart();
           >
             <div className={styles.grid}>
               {visibleProducts.map((p) => (
-                <div key={p.id} className={styles.productCard}>
+                <Link href={`/auth/fakeStore/${p.id}`} key={p.id}>
+                <div  className={styles.productCard}>
                   <div className={styles.productImage}>
                     <img src={p.image} alt={p.title} loading="lazy" />
                   </div>
                   <div className={styles.productInfo}>
                     <h3>{p.title}</h3>
                     <p>${p.price}</p>
-                    <div className={styles.productActions}>
+                    
+      <button className={styles.viewBtn}>View Details</button>
+                    {/* <div className={styles.productActions}>
                       <button
                         className={styles["add-to-cart"]}
                         onClick={() => handleAddToCart(p)}
@@ -99,9 +94,10 @@ const {cart, addToCart}=useCart();
                         {addedItems.includes(p.id) ? "Added" : "Add to Cart"}
                         
                       </button>
-                    </div>
+                    </div> */}
                   </div>
                 </div>
+                </Link>
               ))}
             </div>
           </InfiniteScroll>

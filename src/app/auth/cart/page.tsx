@@ -12,15 +12,7 @@ import {
 } from "@stripe/react-stripe-js";
 import Link from "next/link";
 import styles from "./cart.module.css";
-
-type CartItem = {
-  id: number;
-  image: string;
-  title: string;
-  price: number;
-  quantity: number;
-  
-};
+import { Product , CartItem} from "src/types/products";
 
   const stripePromise = loadStripe(process.env.NEXT_PUBLIC_PUBLISHABLE_KEY!);
 

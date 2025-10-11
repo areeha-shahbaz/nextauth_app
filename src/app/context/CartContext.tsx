@@ -1,20 +1,13 @@
 "use client";
-import { createContext, useContext, useState, useEffect, ReactNode } from "react";
+import { createContext, useContext, useState, useEffect, ReactNode } from "react"
 
-interface CartItem {
-  id: number;
-  title: string;
-  price: number;
-  quantity: number;
-  image:string;
-}
-
+import { CartItem } from "src/types/products";  
 interface CartContextType {
   cart: CartItem[];
   addToCart: (item: CartItem) => void;
-  removeFromCart: (id: number) => void;
+  removeFromCart: (id: string) => void;   
   clearCart: () => void;
-  loading:boolean;
+  loading: boolean;
 }
 
 const CartContext = createContext<CartContextType | undefined>(undefined);
@@ -54,7 +47,7 @@ export function CartProvider({ children }: { children: ReactNode }) {
     });
   }
 
-  function removeFromCart(id: number) {
+  function removeFromCart(id: string) {
     setCart((prev) => prev.filter((i) => i.id !== id));
   }
 
