@@ -21,14 +21,13 @@
 // }
 
 
-
 "use client";
-
 import { useEffect } from "react";
-import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { useCart } from "src/app/context/CartContext";
 
 export default function Success() {
+  const router = useRouter();
   const { clearCart } = useCart();
 
   useEffect(() => {
@@ -56,8 +55,8 @@ export default function Success() {
         Thank you for your purchase.
       </p>
 
-      <Link
-        href="/auth/fakeStore"
+      <button
+        onClick={() => router.push("/fakeStore")}
         style={{
           display: "inline-block",
           padding: "8px 16px",
@@ -66,15 +65,13 @@ export default function Success() {
           borderRadius: "8px",
           fontStyle: "italic",
           fontSize: "14px",
-          textDecoration: "none",
+          border: "none",
+          cursor: "pointer",
           transition: "background 0.3s",
         }}
       >
         Continue Shopping
-      </Link>
+      </button>
     </div>
   );
 }
-
-
-
